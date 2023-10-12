@@ -43,8 +43,8 @@ CREATE TABLE tipo_terreno (
 ---------------------------------
 CREATE TABLE terreno (
     id_terreno INTEGER PRIMARY KEY, 
-    terreno_tipo VARCHAR(20) NOT NULL,
-    FOREIGN KEY (terreno_tipo) REFERENCES tipo_terreno (id_tipo_terreno)             
+    id_tipo_terreno VARCHAR(20) NOT NULL,
+    FOREIGN KEY (id_tipo_terreno) REFERENCES tipo_terreno (id_tipo_terreno)             
 );
 SELECT AddGeometryColumn('', 'terreno', 'geo_terreno', 0, 'POLYGON', 2);
 
