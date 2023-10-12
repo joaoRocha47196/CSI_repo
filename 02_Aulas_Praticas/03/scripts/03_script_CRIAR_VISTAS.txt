@@ -5,7 +5,7 @@
 
 
 --=============
--- Ligação à BD
+-- Ligaï¿½ï¿½o ï¿½ BD
 --=============
 \set dataBase my_gis_gps
 ;
@@ -16,13 +16,11 @@
 --==========================
 --==========================
 
-
-
 --------------------------------
---DROP TABLE IF EXISTS T_PONTO_FRONTEIRA;
---DROP VIEW IF EXISTS V_POLIGONO;
---DROP VIEW IF EXISTS V_LINHA_EXTREMO_COINCIDENTE;
---DROP VIEW IF EXISTS V_LINHA_CONTORNO;
+DROP TABLE IF EXISTS T_PONTO_FRONTEIRA;
+DROP VIEW IF EXISTS V_POLIGONO;
+DROP VIEW IF EXISTS V_LINHA_EXTREMO_COINCIDENTE;
+DROP VIEW IF EXISTS V_LINHA_CONTORNO;
 --------------------------------
 
 
@@ -31,18 +29,24 @@
 -- VIEW V_LINHA_CONTORNO
 -- (a partir de GPS_PONTO)
 ----------------------------
---CREATE VIEW V_LINHA_CONTORNO( id_terreno, g_linha ) AS
---( SELECT 
+
+CREATE VIEW V_LINHA_CONTORNO( oid, id_terreno, g_linha ) AS 
+( SELECT row_number() OVER () AS oid, ST_MakeLine( geo_ponto ), id_terreno 
+ FROM ( SELECT geo_ponto, id_ordem, id_terreno 
+        FROM gps_ponto 
+        ORDER BY id_terreno, id_ordem 
+    ) AS pontos_ordenados 
+ GROUP BY id_terreno ); 
 
 
 ----------------------------
 -- TAUX_LINHA_CONTORNO
 -- (apenas para usar apresentar no QGIS)
 ----------------------------
---DROP TABLE IF EXISTS TAUX_LINHA_CONTORNO;
---CREATE TABLE TAUX_LINHA_CONTORNO ( id SERIAL PRIMARY KEY );
---SELECT AddGeometryColumn
---('', 'taux_linha_contorno', 'g_linha', 0, 'LINESTRING', 2 );
+DROP TABLE IF EXISTS TAUX_LINHA_CONTORNO;
+CREATE TABLE TAUX_LINHA_CONTORNO ( id SERIAL PRIMARY KEY );
+SELECT AddGeometryColumn
+('', 'taux_linha_contorno', 'g_linha', 0, 'LINESTRING', 2 );
 
 --INSERT INTO TAUX_LINHA_CONTORNO( g_linha )
 --SELECT g_linha
