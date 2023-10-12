@@ -1,0 +1,44 @@
+--#############
+--# Paulo Trigo
+--#############
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+-- G08
+--==========================
+
+-- <CLIENT>
+--=============================
+INSERT INTO CLIENT  ( code, bi, f_name, l_name)
+VALUES
+	(15, '83838383', 'Joana', 'Vilhena'),
+	(2, '11111111', 'Pedro', 'Silva'),
+	(333, '55555555', 'Miguel', 'Mendes')
+;
+
+-- <CHILD>
+--=============================
+INSERT INTO CHILD( name, birth_date, code)
+VALUES
+	( 'Maria' , '2020-01-31', 15),
+	( 'Ana' , '2022-01-10', 15),
+	( 'Gonçalo' , '2020-05-14', 2),
+	( 'João' , '2021-04-12', 333)
+;
+
+-- <NURSERY>
+--=============================
+INSERT INTO NURSERY (name)
+VALUES
+	('Fraldas'),
+	('Ursinho')
+;
+

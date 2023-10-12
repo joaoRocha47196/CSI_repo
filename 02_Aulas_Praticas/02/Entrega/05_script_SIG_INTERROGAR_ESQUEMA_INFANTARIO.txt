@@ -1,0 +1,100 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+--==========================
+
+
+-- mais informação sobre "client_encoding" em:
+-- http://www.postgresql.org/docs/9.4/static/multibyte.html
+\encoding WIN1250
+;
+
+
+
+
+--===================
+-- Interrogar CLIENTE
+--===================
+
+-- Ponto geografico de cada cliente
+
+SELECT ST_AsText(geo_point), geo_point binary_point	FROM public.client;
+;
+
+
+-- cada uma das coordenadas (ordenadas e abcissa) do ponto geográfico de cada cliente
+
+SELECT ST_AsText(geo_point) point, ST_X(geo_point) as abcissa, ST_Y(geo_point) as ordenada	FROM public.client;
+;
+
+
+
+
+--=====================
+-- Interrogar FREGUESIA
+--=====================
+
+-- Espaço geografico delimitado por cada freguesia
+
+SELECT name Freguesia, ST_AsText(geo_area) as "Espaco Freguesia" FROM public.parish;
+;
+
+
+-- Área ocupada por cada freguesia
+
+SELECT name Freguesia, ST_AsText(geo_area) as "Espaco Freguesia", ST_Area(geo_area) as "Area [m2]" FROM public.parish;
+;
+
+
+
+
+--==================================
+-- Interrogar INFANTARIO e FREGUESIA
+--==================================
+
+-- Infantários (nome e geometria) de cada freguesia (nome e geometria)
+-- considerando apenas operações espaciais
+
+SELECT	n.name as "Nome Infantario",
+		ST_AsText(n.geo_point) as "Localizacao",
+		p.name as "Freguesia",
+		ST_AsText(p.geo_area) as "Area Freguesia"
+FROM nursery n, parish p
+WHERE ST_Within(n.geo_point, p.geo_area)
+;
+
+
+-- Distância de cada cliente a cada infantário indicando o seu nome próprio e de família
+
+SELECT	CONCAT(c.f_name, ' ', c.l_name) as "Nome Cliente",
+		n.name as "Nome Infantario",
+		ST_Distance(c.geo_point, n.geo_point) as "Distancia"
+FROM client c
+CROSS JOIN nursery n
+;
+
+
+-- nome do infantário e num único campo o nome próprio e de família dos clientes
+-- que vivem a uma distância superior a 20 (unidades) de algum infantário
+
+SELECT	CONCAT(c.f_name, ' ', c.l_name) as "Nome Cliente",
+		n.name as "Nome Infantario",
+		ST_Distance(c.geo_point, n.geo_point) as "Distancia"
+FROM client c
+CROSS JOIN nursery n
+WHERE ST_Distance(c.geo_point, n.geo_point) > 20
+;

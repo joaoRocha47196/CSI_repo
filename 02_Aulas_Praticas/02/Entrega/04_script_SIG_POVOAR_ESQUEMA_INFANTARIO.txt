@@ -1,0 +1,80 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+-- G08
+--==========================
+
+
+
+--================
+-- Actualizar CLIENT
+--================
+
+UPDATE CLIENT
+SET geo_point = ST_GeomFromText('POINT(10 20)')
+WHERE code = 15
+;
+
+UPDATE CLIENT
+SET geo_point = ST_GeomFromText('POINT(30 20)')
+WHERE code = 2
+;
+
+UPDATE CLIENT
+SET geo_point = ST_GeomFromText('POINT(30 40)')
+WHERE code = 333
+;
+
+
+--================
+-- Actualizar NURSERY
+--================
+
+UPDATE NURSERY
+SET geo_point = ST_GeomFromText('POINT(40 10)')
+WHERE name = 'Fraldas'
+;
+
+
+UPDATE NURSERY
+SET geo_point = ST_GeomFromText('POINT(40 10)')
+WHERE name = 'Ursinho'
+;
+
+
+
+--============
+-- Povoar PARISH
+--============
+
+DELETE FROM PARISH
+;
+
+
+INSERT INTO PARISH(name, geo_area) 
+VALUES 
+	('Lumiar', ST_GeomFromText('POLYGON((9.00 9.00, 10.00 40.00, 25.00 30.00,15.00 15.00, 9.00 9.00))'))
+	
+;
+
+
+	--('Lumiar', ST_GeomFromText('POLYGON((10.00 10.00, 10.00 40.00, 20.00 30.00, 10.00 10.00))'))
+
+
+
+
+

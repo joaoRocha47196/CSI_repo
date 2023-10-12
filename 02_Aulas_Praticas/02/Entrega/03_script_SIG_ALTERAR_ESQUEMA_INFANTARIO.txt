@@ -1,0 +1,54 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+-- G08
+--==========================
+
+
+----------------------------------------------
+-- Criar Esquemas de Relacao
+-- (que derivem de Entidades e de Associacoes)
+----------------------------------------------
+
+-- Esquema de Relacao <PARISH>
+CREATE TABLE PARISH
+(
+name VARCHAR( 30 ) NOT NULL
+)
+;
+
+-------------------------------
+-- Criar os Atributos Espaciais
+-------------------------------
+
+-- <CLIENT>
+--=============================
+-- <geo_point>
+SELECT AddGeometryColumn('', 'client', 'geo_point', 0, 'POINT', 2);
+
+
+-- <NURSERY>
+--=============================
+-- <geo_point>
+SELECT AddGeometryColumn('', 'nursery', 'geo_point', 0, 'POINT', 2);
+
+
+-- <PARISH>
+--=============================
+-- <geo_area>
+SELECT AddGeometryColumn('', 'parish', 'geo_area', 0, 'POLYGON', 2);
+

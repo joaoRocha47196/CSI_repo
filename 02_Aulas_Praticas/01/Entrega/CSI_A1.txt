@@ -1,0 +1,85 @@
+#####################
+# CSI_AULA_PRATICA_1
+#####################
+
+#######################
+# Criação Base de dados programticamente (PSQL)
+# Utilizado na alinea 3
+#######################
+
+# Criar uma nova tabela
+DROP DATABASE IF EXISTS my_gis; 
+CREATE DATABASE my_gis  
+
+# Pelo psql, estabelecer ligação à base de dados my_gis 
+\c my_gis postgres localhost 5432
+
+# Adicionar o extensor PostGIS á base de dados
+CREATE EXTENSION postgis;
+
+# Replicar uma base de dados pelo psql
+CREATE DATABASE <nome da replica> TEMPLATE = <base de dados a replicar>
+
+#######################
+# Tipo LINESTRING, (tipo geometrico proveniente da extencao postgis) 
+# Utilizado na alinea 4
+#######################
+
+# Criação Coluna
+AddGeometryColumn(<schema_name>, <table_name>, <column_name>, <srid>, <type>, <dimension>)
+SELECT AddGeometryColumn('', 'gt1', 'gc1', 0, 'LINESTRING', 2);
+
+# Inserção Valor
+ST_GeomFromText('LINESTRING(2 3, 4 5, 6 5, 7 8)', 0)
+
+
+#######################
+# Visualização grafica no QGIS 
+# Utilizado na alinea 6
+#######################
+
+# Criação de nova layer
+Camada/adicionarCamda/PostGis
+
+# Para estabelecer ligação com o servidor 
+Não esquecer na conexão de colocar o nome da base de dados à qual estamos a conectar
+E maquina é localhost
+
+# Adicionar legenda à representação gráfica: 
+-> Botão direito -> Propriedades -> Etiquetas -> Single Label -> Escolher atributo
+
+#######################
+# Representar geometria em formato legivel
+# Adicionar atributos a uma tabela já definida
+# Atualizar e eliminar tuplos
+# Alínea 7
+#######################
+
+#Tuplos com geometria em formato legivel 
+ST_AsText(<atributo>)
+
+#Adicionar atributos com geometria a uma tabela já definida:
+SELECT AddGeometryColumn(<schema_name>, <table_name>, <column_name>, <srid>, <type>, <dimension>)
+
+#Atualizar tuplos
+UPDATE <tabela> SET <atributo> WHERE <condição>
+
+#Eliminar toda a informação
+DELETE FROM <tabela> ou DELETE FROM <tabela> where 1=1 
+
+#######################
+# Alterar a estrutura de uma tabela existente
+# Adicionar atributo geométrico
+# Alínea 8
+#######################
+
+# Alterar a estrutura de uma tabela com atributos geométricos, e adicionar mais um atributo geométrico. Semelhante ao ponto 7b
+SELECT AddGeometryColumn(<schema_name>, <table_name>, <column_name>, <srid>, <type>, <dimension>)
+
+# Inserir um novo tuplo na tabela alterada gt1 (do guia prático 1), exemplo:
+INSERT INTO gt1 VALUES(1, 'Com 2 Atributos Geo', 'LINESTRING(2 3, 4 5, 6 5, 7 5)', 'LINESTRING(3 3, 5 5, 7 5, 8 8)');
+
+
+
+
+

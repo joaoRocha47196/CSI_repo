@@ -1,0 +1,146 @@
+--#############
+--# Paulo Trigo
+--# OCT.2016
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+--___________________________________________________________
+-- \connect (or \c) [ dbname [ username ] [ host ] [ port ] ]
+-- (cf. postgresql-9.4-A4.pdf)
+--___________________________________________________________
+\connect :dataBase :userName
+;
+--==========================
+-- G08
+--==========================
+
+
+-------------------------------
+-- create the relational schema
+-------------------------------
+
+DROP TABLE IF EXISTS CLIENT_NURSERY;
+DROP TABLE IF EXISTS NURSERY;
+DROP TABLE IF EXISTS CHILD;
+DROP TABLE IF EXISTS CLIENT;
+
+
+
+----------------------------------------------
+-- Criar Esquemas de Relacao
+-- (que derivem de Entidades e de Associacoes)
+----------------------------------------------
+
+-- Esquema de Relacao <CLIENT>
+CREATE TABLE CLIENT
+(
+code INT NOT NULL,
+bi VARCHAR( 8 ) NOT NULL,
+f_name VARCHAR( 30 ) NOT NULL,
+l_name VARCHAR( 30 ) NOT NULL
+)
+;
+
+-- Esquema de Relacao <CHILD>
+CREATE TABLE CHILD
+(
+name VARCHAR( 30 ) NOT NULL,
+birth_date DATE NOT NULL
+)
+;
+
+-- Esquema de Relacao <NURSERY>
+CREATE TABLE NURSERY
+(
+name VARCHAR( 30 ) NOT NULL
+)
+;
+
+-- Esquema de Relacao <CLIENT_NURSERY>
+CREATE TABLE CLIENT_NURSERY
+(
+code INT NOT NULL,
+name VARCHAR( 30 ) NOT NULL
+)
+;
+
+---------------------------------------------
+-- Criar Atributos que derivem de Associacoes
+---------------------------------------------
+
+-- Associacao: <CHILD> - <CLIENT>
+ALTER TABLE CHILD
+ADD code INT NOT NULL
+;
+
+-------------------------------------------------
+-- Criar as Restricoes de Integridade de Entidade
+-------------------------------------------------
+
+-- CLIENT
+--========
+ ALTER TABLE CLIENT
+ ADD CONSTRAINT pk_CLIENT
+    PRIMARY KEY( code )
+;
+
+-- NURSERY
+--========
+ ALTER TABLE NURSERY
+ ADD CONSTRAINT pk_NURSERY
+    PRIMARY KEY( name )
+;
+
+-- CHILD
+--========
+ ALTER TABLE CHILD
+ ADD CONSTRAINT pk_CHILD
+    PRIMARY KEY( name, birth_date, code)
+;
+
+-- CLIENT_NURSERY
+--========
+ ALTER TABLE CLIENT_NURSERY
+ ADD CONSTRAINT pk_CLIENT_NURSERY
+    PRIMARY KEY( code, name)
+;
+
+
+-------------------------------------------------
+-- Criar as Restricoes de Integridade Referencial
+-------------------------------------------------
+
+-- <CHILD>
+--========
+ALTER TABLE CHILD
+ADD CONSTRAINT fk1_CHILD
+    FOREIGN KEY( code )
+    REFERENCES CLIENT( code )
+;
+
+-- <CLIENT_NURSERY>
+--========
+ALTER TABLE CLIENT_NURSERY
+ADD CONSTRAINT fk1_CLIENT_NURSERY
+    FOREIGN KEY( code )
+    REFERENCES CLIENT( code )
+;
+
+-- <CLIENT_NURSERY>
+--========
+ALTER TABLE CLIENT_NURSERY
+ADD CONSTRAINT fk2_CLIENT_NURSERY
+    FOREIGN KEY( name )
+    REFERENCES NURSERY( name )
+;
+
+
+
+
+
+

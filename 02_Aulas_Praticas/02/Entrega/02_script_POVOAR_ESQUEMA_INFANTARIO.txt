@@ -1,0 +1,82 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+-- NOTA: completar em <XX>
+--==========================
+
+
+
+
+-- <ER>
+--=============================
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- ...
+
+
+
+
+-- <ER>
+--=============================
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- ...
+
+
+
+
+-- <ER>
+--=============================
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- ...
+
+
+
+
+-- <ER>
+--=============================
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- ...
+
+
+

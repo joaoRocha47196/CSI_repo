@@ -1,0 +1,92 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+--==========================
+
+
+-- mais informação sobre "client_encoding" em:
+-- http://www.postgresql.org/docs/9.4/static/multibyte.html
+\encoding WIN1250
+;
+
+
+
+
+--=========================================
+-- Quais os infantários de cada freguesia ?
+--=========================================
+-- Atencao: a vista deve projectar o atributo "oid" ou uma chave primária
+--          do tipo "integer" de modo a ser apresentada no QGis
+--=======================================================================
+
+
+DROP VIEW IF EXISTS v_cli_frg;
+DROP VIEW IF EXISTS v_inf_frg;
+
+--==================================
+-- Vista v_cli_frg
+--==================================
+
+-- Apresentar os clientes com filhos em idade escolar que residem até 
+-- 100m dos infantários da freguesia mais lucrativa
+
+-- Auxiliar View v_freguesia_mais_lucrativa
+
+CREATE VIEW v_freguesia_mais_lucrativa AS
+SELECT 
+	i.freguesia, 
+	SUM(lucro) AS total_lucro
+FROM infantarios i
+GROUP BY i.freguesia
+ORDER BY total_lucro DESC
+LIMIT 1;
+
+-- Auxiliar View filhos em idade escolar
+
+CREATE VIEW v_filhos_idade_escolar AS
+SELECT 
+	f1.cliente_id AS cliente_id_filho, 
+	f1.nome AS nome_filho, 
+	f1.idade AS idade_filho
+FROM filhos f1
+WHERE f1.idade >= 6 AND f2.idade <= 18;
+
+-- View Final
+
+CREATE VIEW v_cli_frg AS
+SELECT 
+	c.cliente_id, 
+	c.nome AS nome_cliente, 
+	c.idade AS idade_cliente, 
+	l.nome_freguesia
+FROM 
+	v_filhos_idade_escolar f
+JOIN 
+	clientes c ON f.cliente_id_filho = c.cliente_id
+JOIN 
+	infantarios i ON ST_DistanceSphere(ST_MakePoint(c.latitude, c.longitude), ST_MakePoint(i.latitude, i.longitude)) <= 100
+JOIN 
+	v_freguesia_mais_lucrativa l ON i.freguesia = l.freguesia;
+
+
+
+
+
+-- SELECT nome_infantario, nome_freguesia_residencia, nome_freguesia_infantario, ST_AsText( g_local_cliente )
+-- FROM v_inf_frg
+-- ;
+

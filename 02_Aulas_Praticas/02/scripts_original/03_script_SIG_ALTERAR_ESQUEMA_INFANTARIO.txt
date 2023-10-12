@@ -1,0 +1,202 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+-- NOTA: completar em <XX>
+--==========================
+
+
+
+
+----------------------------------------------
+-- Criar Esquemas de Relacao
+-- (que derivem de Entidades e de Associacoes)
+----------------------------------------------
+
+-- Esquema de Relacao <ER>
+-- CREATE TABLE <ER>
+
+
+;
+-- Esquema de Relacao <ER>
+-- CREATE TABLE <ER>
+
+
+;
+-- Esquema de Relacao <ER>
+-- CREATE TABLE <ER>
+;
+
+
+-- ...
+
+
+
+
+---------------------------------------------
+-- Criar Atributos que derivem de Associacoes
+---------------------------------------------
+
+-- Associacao: <ER1> - <ER2>
+-- ALTER TABLE <ER1>
+-- ADD 
+;
+-- ALTER TABLE <ER2>
+-- ADD 
+;
+
+
+-- Associacao: <ER1> - <ER2>
+-- ALTER TABLE <ER1>
+-- ADD 
+;
+-- ALTER TABLE <ER2>
+-- ADD 
+;
+
+
+-- ...
+
+
+
+
+-------------------------------------------------
+-- Criar as Restricoes de Integridade de Entidade
+-------------------------------------------------
+
+-- <ER>
+--========
+-- ALTER TABLE <ER>
+-- ADD CONSTRAINT pk_<ER>
+--    PRIMARY KEY( ...
+;
+
+-- ALTER TABLE <ER>
+-- ADD CONSTRAINT ak1_<ER>
+--    UNIQUE( ...
+;
+
+
+-- <ER>
+--========
+-- ALTER TABLE <ER>
+-- ADD CONSTRAINT pk_<ER>
+--    PRIMARY KEY( ...
+;
+
+-- ALTER TABLE <ER>
+-- ADD CONSTRAINT ak1_<ER>
+--    UNIQUE( ...
+;
+
+
+-- ...
+
+
+
+
+-------------------------------------------------
+-- Criar as Restricoes de Integridade Referencial
+-------------------------------------------------
+
+-- <ER>
+--========
+-- ALTER TABLE <ER>
+-- ADD CONSTRAINT fk1_<ER>
+--    FOREIGN KEY( ...
+--    REFERENCES ...
+--    ON DELETE ...
+;
+
+
+-- <ER>
+--========
+-- ALTER TABLE <ER>
+-- ADD CONSTRAINT fk1_<ER>
+--    FOREIGN KEY( ...
+--    REFERENCES ...
+--    ON DELETE ...
+;
+
+
+-- ...
+
+
+
+
+-------------------------------
+-- Criar os Atributos Espaciais
+-------------------------------
+
+-- <ER>
+--=============================
+-- <coluna_GEO>
+-- SELECT ...
+;
+
+
+-- <coluna_GEO>
+-- SELECT ...
+;
+
+
+-- <coluna_GEO>
+-- SELECT ...
+;
+
+-- ...
+
+
+
+
+-- <ER>
+--=============================
+-- <coluna_GEO>
+-- SELECT ...
+;
+
+
+-- <coluna_GEO>
+-- SELECT ...
+;
+
+
+-- <coluna_GEO>
+-- SELECT ...
+;
+
+-- ...
+
+
+
+
+-- <ER>
+--=============================
+-- <coluna>
+-- SELECT ...
+;
+
+
+-- <coluna>
+-- SELECT ...
+;
+
+
+-- <coluna>
+-- SELECT ...
+;
+
+-- ...

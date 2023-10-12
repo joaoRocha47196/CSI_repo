@@ -1,0 +1,90 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+--==========================
+
+
+
+
+--================
+-- Actualizar <ER>
+--================
+
+-- UPDATE <ER>
+-- SET ...
+-- WHERE ...
+;
+
+
+-- UPDATE <ER>
+-- SET ...
+-- WHERE ...
+;
+
+
+-- UPDATE <ER>
+-- SET ...
+-- WHERE ...
+;
+
+
+
+
+--================
+-- Actualizar <ER>
+--================
+
+-- UPDATE <ER>
+-- SET ...
+-- WHERE ...
+;
+
+
+-- UPDATE <ER>
+-- SET ...
+-- WHERE ...
+;
+
+
+-- UPDATE <ER>
+-- SET ...
+-- WHERE ...
+;
+
+
+
+
+--============
+-- Povoar <ER>
+--============
+
+-- DELETE FROM <ER>
+;
+
+
+-- INSERT INTO <ER>( ...
+-- VALUES ...
+;
+
+
+-- INSERT INTO <ER>( ...
+-- VALUES ...
+;
+
+
+
+
