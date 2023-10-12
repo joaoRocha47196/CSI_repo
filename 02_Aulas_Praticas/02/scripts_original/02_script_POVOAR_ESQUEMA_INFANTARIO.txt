@@ -2,8 +2,11 @@
 --# Paulo Trigo
 --#############
 
+
+
+
 --=============
--- Ligação à BD
+-- Ligaï¿½ï¿½o ï¿½ BD
 --=============
 \set dataBase my_gis
 ;
@@ -12,33 +15,68 @@
 \connect :dataBase :userName
 ;
 --==========================
--- G08
+-- NOTA: completar em <XX>
 --==========================
 
--- <CLIENT>
+
+
+
+-- <ER>
 --=============================
-INSERT INTO CLIENT  ( code, bi, f_name, l_name)
-VALUES
-	(15, '83838383', 'Joana', 'Vilhena'),
-	(2, '11111111', 'Pedro', 'Silva'),
-	(333, '55555555', 'Miguel', 'Mendes')
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
 ;
 
--- <CHILD>
---=============================
-INSERT INTO CHILD( name, birth_date, code)
-VALUES
-	( 'Maria' , '2020-01-31', 15),
-	( 'Ana' , '2022-01-10', 15),
-	( 'Gonçalo' , '2020-05-14', 2),
-	( 'João' , '2021-04-12', 333)
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
 ;
 
--- <NURSERY>
+-- ...
+
+
+
+
+-- <ER>
 --=============================
-INSERT INTO NURSERY (name)
-VALUES
-	('Fraldas'),
-	('Ursinho')
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
 ;
+
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- ...
+
+
+
+
+-- <ER>
+--=============================
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- ...
+
+
+
+
+-- <ER>
+--=============================
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- INSERT INTO <ER>( ...
+-- VALUES( ...
+;
+
+-- ...
+
+
 

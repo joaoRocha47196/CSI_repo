@@ -5,7 +5,7 @@
 
 
 --=============
--- Ligaï¿½ï¿½o ï¿½ BD
+-- Ligação à BD
 --=============
 \set dataBase my_gis_gps
 ;
@@ -31,29 +31,43 @@ DELETE FROM TIPO_TERRENO;
 ----------------------------
 -- TIPO_TERRENO
 ----------------------------
-INSERT INTO tipo_terreno( id_tipo_terreno )
-VALUES
-    ('Lago'),
-    ('Floresta'),
-    ('Bosque'),
-    ('Planicie'),
-    ('Deserto'),
-    ('Vale')
-;
+--INSERT INTO tipo_terreno( id_tipo_terreno )
+--
+--);
+
+--INSERT INTO tipo_terreno( id_tipo_terreno )
+--
+--);
+
+
 
 ----------------------------
 -- TERRENO
 ----------------------------
-INSERT INTO terreno( id_terreno, id_tipo_terreno )
-VALUES
-    (1, 'Lago'),
-    (2, 'Lago'),
-    (3, 'Floresta')
-    (4, 'Bosque')
-    (5, 'Planicie')
-    (6, 'Deserto')
-    (7, 'Vale')
-;
+--INSERT INTO terreno( id_terreno, id_tipo_terreno )
+--
+--);
+
+--INSERT INTO terreno( id_terreno, id_tipo_terreno )
+--
+--);
+
+--INSERT INTO terreno( id_terreno, id_tipo_terreno )
+--
+--);
+
+
+
+----------------------------
+-- GPS_PONTO
+----------------------------
+-- INSERT INTO gps_ponto( 
+--
+--);
+
+
+
+
 
 ----------------------------
 -- GPS_PONTO
@@ -63,8 +77,7 @@ VALUES
 -- >> DESCOMEMNTAR A PROXIMA LINHA NA RESPOSTA A QUESTAO 3 DO GUIAO DA AULA PRATICA
 -- >> (o QuantumGIS apenas regista o layer se ele tiver pelo menos 1 geometria)
 --================================================================================================
-
-INSERT INTO gps_ponto VALUES (1, 1,  ST_MakePoint( 0, 0 ) );
+-- INSERT INTO gps_ponto VALUES (1, 1,  ST_MakePoint( 0, 0 ) );
 
 
 
