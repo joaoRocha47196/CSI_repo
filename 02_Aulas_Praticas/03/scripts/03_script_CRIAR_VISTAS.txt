@@ -30,13 +30,14 @@ DROP VIEW IF EXISTS V_LINHA_CONTORNO;
 -- (a partir de GPS_PONTO)
 ----------------------------
 
-CREATE VIEW V_LINHA_CONTORNO( oid, id_terreno, g_linha ) AS 
-( SELECT row_number() OVER () AS oid, ST_MakeLine( geo_ponto ), id_terreno 
+CREATE VIEW V_LINHA_CONTORNO( g_linha, id_terreno ) AS 
+
+( SELECT ST_MakeLine( geo_ponto ), id_terreno 
  FROM ( SELECT geo_ponto, id_ordem, id_terreno 
-        FROM gps_ponto 
-        ORDER BY id_terreno, id_ordem 
-    ) AS pontos_ordenados 
- GROUP BY id_terreno ); 
+ FROM gps_ponto 
+ ORDER BY id_terreno, id_ordem ) AS pontos_ordenados 
+ GROUP BY id_terreno 
+ ); 
 
 
 ----------------------------
@@ -48,9 +49,9 @@ CREATE TABLE TAUX_LINHA_CONTORNO ( id SERIAL PRIMARY KEY );
 SELECT AddGeometryColumn
 ('', 'taux_linha_contorno', 'g_linha', 0, 'LINESTRING', 2 );
 
---INSERT INTO TAUX_LINHA_CONTORNO( g_linha )
---SELECT g_linha
---FROM V_LINHA_CONTORNO;
+INSERT INTO TAUX_LINHA_CONTORNO( g_linha )
+SELECT g_linha
+FROM V_LINHA_CONTORNO;
 
 
 
@@ -58,21 +59,22 @@ SELECT AddGeometryColumn
 -- VIEW V_LINHA_EXTREMO_COINCIDENTE
 -- (gerar extremidades coincidentes)
 ----------------------------
---CREATE VIEW V_LINHA_EXTREMO_COINCIDENTE( id_terreno, g_linha ) AS
---SELECT 
+CREATE VIEW V_LINHA_EXTREMO_COINCIDENTE( id_terreno, g_linha ) AS
+SELECT id_terreno, ST_UnaryUnion(g_linha) as g_linha
+FROM V_LINHA_CONTORNO;
 
 
 
 ----------------------------
 -- VIEW V_POLIGONO
 ----------------------------
---CREATE VIEW V_POLIGONO( id_terreno, g_poligono ) AS
---SELECT 
+CREATE VIEW V_POLIGONO( id_terreno, g_poligono ) AS
+SELECT id_terreno, ST_BuildArea(g_linha)
+FROM V_LINHA_EXTREMO_COINCIDENTE;
 
 
-
---SELECT id_terreno, ST_AsText( g_poligono ) AS g_poligono
---FROM V_POLIGONO;
+SELECT id_terreno, ST_AsText( g_poligono ) AS g_poligono
+FROM V_POLIGONO;
 
 
 
