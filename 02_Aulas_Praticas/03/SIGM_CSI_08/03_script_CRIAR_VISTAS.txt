@@ -17,7 +17,9 @@
 --==========================
 
 --------------------------------
+
 DROP TABLE IF EXISTS T_PONTO_FRONTEIRA;
+DROP TABLE IF EXISTS TAUX_LINHA_CONTORNO;
 DROP VIEW IF EXISTS V_POLIGONO;
 DROP VIEW IF EXISTS V_LINHA_EXTREMO_COINCIDENTE;
 DROP VIEW IF EXISTS V_LINHA_CONTORNO;
@@ -27,6 +29,7 @@ DROP VIEW IF EXISTS V_LINHA_CONTORNO;
 
 ----------------------------
 -- VIEW V_LINHA_CONTORNO
+-- 7 a
 -- (a partir de GPS_PONTO)
 ----------------------------
 
@@ -42,9 +45,9 @@ CREATE VIEW V_LINHA_CONTORNO( g_linha, id_terreno ) AS
 
 ----------------------------
 -- TAUX_LINHA_CONTORNO
+-- 7 b
 -- (apenas para usar apresentar no QGIS)
 ----------------------------
-DROP TABLE IF EXISTS TAUX_LINHA_CONTORNO;
 CREATE TABLE TAUX_LINHA_CONTORNO ( id SERIAL PRIMARY KEY );
 SELECT AddGeometryColumn
 ('', 'taux_linha_contorno', 'g_linha', 0, 'LINESTRING', 2 );
@@ -57,6 +60,7 @@ FROM V_LINHA_CONTORNO;
 
 ----------------------------
 -- VIEW V_LINHA_EXTREMO_COINCIDENTE
+-- 7 c
 -- (gerar extremidades coincidentes)
 ----------------------------
 CREATE VIEW V_LINHA_EXTREMO_COINCIDENTE( id_terreno, g_linha ) AS
@@ -67,6 +71,7 @@ FROM V_LINHA_CONTORNO;
 
 ----------------------------
 -- VIEW V_POLIGONO
+-- 7 d
 ----------------------------
 CREATE VIEW V_POLIGONO( id_terreno, g_poligono ) AS
 SELECT id_terreno, ST_BuildArea(g_linha)
@@ -80,23 +85,31 @@ FROM V_POLIGONO;
 
 ----------------------------
 -- T_LINHA_EXTREMO_COINCIDENTE
+-- 7 e
 -- (criar tabela para visualizar no QGIS)
 ----------------------------
---CREATE TABLE T_PONTO_FRONTEIRA( id SERIAL PRIMARY KEY );
---SELECT AddGeometryColumn( '', 't_ponto_fronteira', 'g_multi_ponto', 0, 'MULTIPOINT', 2 );
+CREATE TABLE T_PONTO_FRONTEIRA( id SERIAL PRIMARY KEY );
+SELECT AddGeometryColumn( '', 't_ponto_fronteira', 'g_multi_ponto', 0, 'MULTIPOINT', 2 );
 
+-- Permite projetar todas as linhas contidas numa multi-linha
+SELECT ST_GeometryN( g_linha,
+                     generate_series( 1, ST_NumGeometries( g_linha ) ) ) AS g_linha
+FROM V_LINHA_EXTREMO_COINCIDENTE;
 
---SELECT ST_GeometryN( g_linha,
---                     generate_series( 1, ST_NumGeometries( g_linha ) ) ) AS g_linha
---FROM V_LINHA_EXTREMO_COINCIDENTE;
+-- Resulta uma lista da paridade de cada n de 1 a 10
+SELECT
+( CASE WHEN x % 2 = 0
+  THEN 'PAR'
+  ELSE 'IMPAR'
+  END )
+FROM generate_series( 1, 10 ) AS x;
 
---SELECT
---( CASE WHEN x % 2 = 0
---  THEN 'PAR'
---  ELSE 'IMPAR'
---  END )
---FROM generate_series( 1, 10 ) AS x
+-- Inserir pontos de fronteira na tabela T_PONTO_FRONTEIRA
+INSERT INTO T_PONTO_FRONTEIRA (g_multi_ponto)
+SELECT ST_Boundary(g_linha)
+FROM (
+  SELECT ST_GeometryN(g_linha, generate_series(1, ST_NumGeometries(g_linha))) AS g_linha
+  FROM V_LINHA_EXTREMO_COINCIDENTE
+) AS PontosFronteira
+WHERE NOT ST_IsEmpty(ST_Boundary(g_linha));
 
-
---INSERT INTO T_PONTO_FRONTEIRA( g_multi_ponto )
---SELECT
