@@ -5,7 +5,7 @@
 
 
 --=============
--- Ligação à BD
+-- Ligaï¿½ï¿½o ï¿½ BD
 --=============
 \set dataBase my_gis_gps
 ;
@@ -21,9 +21,10 @@
 -- TERRENO
 -- (actualizar os poligonos)
 ----------------------------
---UPDATE TERRENO
---SET g_terreno = ( SELECT g_poligono
---
+UPDATE TERRENO
+SET geo_terreno = V_POLIGONO.g_poligono
+FROM V_POLIGONO
+WHERE TERRENO.id_terreno = V_POLIGONO.id_terreno;
 
 
 

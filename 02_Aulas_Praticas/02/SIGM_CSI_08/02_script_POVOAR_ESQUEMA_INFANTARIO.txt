@@ -15,6 +15,13 @@
 -- G08
 --==========================
 
+-- Eliminar Dados (anteriores)
+--=============================
+DELETE FROM NURSERY;
+DELETE FROM CHILD;
+DELETE FROM CLIENT;
+---------------------------------
+
 -- <CLIENT>
 --=============================
 INSERT INTO CLIENT  ( code, bi, f_name, l_name)
