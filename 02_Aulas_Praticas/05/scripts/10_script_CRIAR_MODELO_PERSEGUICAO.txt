@@ -1,0 +1,71 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+--=============
+-- Liga��o � BD
+--=============
+\set dataBase my_gis_aug_real
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+--==========================
+
+
+-----------------------------------------------------
+-----------------------------------------------------
+-- Criar Estrutura de suporte 'a nocao de perseguicao
+-----------------------------------------------------
+-----------------------------------------------------
+DELETE FROM pp;
+DELETE FROM object;
+DROP TABLE IF EXISTS pp CASCADE;
+DROP TABLE IF EXISTS pp OBJECT;
+----------------------------------------------------
+
+
+
+----------------------------------------------------
+-- :::::::::::::::::::
+-- NOÇÃO DE CORPO/OBJETO
+-- :::::::::::::::::::
+-- NOT USED
+CREATE TABLE object(
+    id INTEGER PRIMARY KEY,
+    cinematica_id INTEGER REFERENCES cinematica(id)
+);
+
+-- :::::::::::::::::::
+-- NOÇÃO DE PERSEGUIÇÃO
+-- :::::::::::::::::::
+CREATE TABLE pp(
+    id_perseguidor INTEGER REFERENCES cinematica(id),
+    id_alvo INTEGER REFERENCES cinematica(id),
+    PRIMARY KEY (id_perseguidor, id_alvo)
+);
+
+
+
+---------------------------------------------------
+---------------------------------------------------
+-- Inserir dados para caracterizacao da perseguicao
+---------------------------------------------------
+---------------------------------------------------
+
+-- NOT USED, REMOVE
+INSERT INTO object (id, cinematica_id)
+VALUES 
+    (1, 1),
+    (2, 2);
+    
+-- Como exemplo indicar que o ojecto 1 persegue o 2
+INSERT INTO pp( id_perseguidor, id_alvo )
+VALUES( 1, 2 );
+
+SELECT *
+FROM pp;
+
