@@ -10,7 +10,7 @@
 --
 -- estas instrucoes assumem que o "path" corrente contem a pasta "scripts"
 --
--- assume também que a aplicacao raster2pgsql.exe está em:
+-- assume tambï¿½m que a aplicacao raster2pgsql.exe estï¿½ em:
 --   C:\myApp\PostgreSQL\9.6\bin
 --   (deve ajustar este "path" de acordo com a sua instalacao)
 --

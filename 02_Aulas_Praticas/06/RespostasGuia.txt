@@ -1,0 +1,39 @@
+
+Capítulo 3:
+
+c) Aresente o número de objetos representados em cada “layer” (selecionar-nome-do-layer \ botão direito-rato \ [Show Feature Count]).
+    planet_osm_line[147339]
+    planet_osm_point[54648]
+    planet_osm_polygon[121742]
+    planet_osm_roads[17188]
+
+d) Fique também como uma ideia global dos atributos alfanuméricos associados a cada “layer” (selecionar-nome-do-layer \ botão-direito-rato \ [Open Attribute Table]).
+
+
+Capítulo 4:
+
+a) (...) Arraste o rato (pressionando o botão) sobre Lisboa e escolha determinada coordenada
+    Coordenada escolhida: -9.20025,38.64568
+
+c) Depois de instalar vá a Plugins \ ZoomToPaste e use as coordenadas que capturou para fazer fazer “pan” para esse local
+    Duvida, não entendi o output, fica tudo branco
+
+Capitulo 5:
+
+a)  Obtenha as linhas que representam percursos para bicicleta
+    O comando SELECT ST_AsText( way ) FROM planet_osm_line WHERE bicycle NOTNULL; retorna 4853 tuplos, logo 4853 linhas de percursos para bicicleta
+
+b)  Quantos percursos para bicicleta existem em Lisboa?
+
+    O comando SELECT COUNT( * )FROM(  SELECT ST_AsText( way )   FROM planet_osm_line  WHERE bicycle NOTNULL) AS T; retorna a contagem de todos os tuplos da query da alinea a)
+    O atributo count da tabela T da query anterior contem o valor 4853 (linhas de percurso para bicicleta)
+
+c)  Qual a cota Z dos pontos representados em Lisboa?
+    A conta Z dos pontos em lisboa vem apresentada no atributo "ele" (elevação), na tabela dos pontos (planet_osm_point) e pode ser obtida pelo comando SQL:
+    SELECT ele FROM planet_osm_point WHERE ele NOTNULL;
+
+d) Quais dos pontos representados têm informação sobre percurso para bicicleta?
+
+    Os pontos representados com informação sobre percurso para bicicleta estão representados na tabela dos pontos, onde o atributo bycicle não é null
+    SELECT bicycle FROM planet_osm_point WHERE bicycle NOTNULL;
+    

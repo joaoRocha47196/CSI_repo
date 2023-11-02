@@ -11,7 +11,7 @@
 -- que linhas representam percursos para bicicleta?
 SELECT ST_AsText( way ) 
 FROM planet_osm_line
-WHERE bicycle NOTNULL
+WHERE bicycle NOTNULL;
 
 
 -- quantos percursos para bicicleta existem em Lisboa?
