@@ -11,6 +11,17 @@
 -- http://postgis.net/docs/RT_reference.html
 --
 
+--=============
+-- Ligacao a BD
+--=============
+\set dataBase my_gis_raster
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+--==========================
 
 
 -- obter um "sumario" sobre o conteudo de cada "raster"
