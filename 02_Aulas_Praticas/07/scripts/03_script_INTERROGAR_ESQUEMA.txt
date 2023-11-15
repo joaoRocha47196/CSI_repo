@@ -1,0 +1,32 @@
+--#############
+--# Paulo Trigo
+--#############
+
+
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis_top
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+;
+--==========================
+--==========================
+
+
+-- mais informação sobre "client_encoding" em:
+-- http://www.postgresql.org/docs/8.1/static/multibyte.html
+\encoding WIN1250;
+
+
+--=================================
+-- Interrogar com Matriz Topologica
+--=================================
+
+-- <COMPLETAR>
+
+
+
+
