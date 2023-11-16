@@ -1,0 +1,81 @@
+Terrenos, rios e objetos móveis:
+----------------------------------------------------------------------------------------------------------------------------------------
+Cada tipo de terreno pode conter outros
+
+Terreno afeta a velocidade linear dos objetos (em percentagem, ex: 50% da velocidade máxima)
+
+Um terreno interseta outros tipos de terreno
+
+Um terreno que inclui os restantes não precisa de ser explicitamente representado e não afeta a mobilidade dos objetos.
+
+Existe hierarquia de inclusão de terrenos
+
+Existem rios, que também alteram a velocidade dos objetos que sobre eles se deslocam.
+
+Existem objetos diferentes, afetados de forma diferente pelos terrenos (Ex: barco não é afetado por água, mas é afetado por pântano)
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Objetos móveis:
+------------------------------------------------------------------------------------------------------------------------------------------
+Cada objeto móvel é um ponto geográfico.
+
+O objeto tem orientação (ângulo), velocidade, e aceleração (com componentes em x e y), e velocidade e aceleração angular.
+
+	g_posição -> posição geográfica
+
+	orientacao -> orientação
+
+	velocidade.linear -> vetor com componentes (x,y) da velocidade
+
+	velocidade.angular -> velocidade angular do objeto
+
+	tempo -> instante de tempo
+
+
+	• g_posicao := g_posicao + velocidade.linear * tempo
+	• orientacao := orientacao + velocidade.angular * tempo
+	• velocidade.linear := velocidade.linear + aceleracao.linear * tempo
+	• velocidade.angular := velocidade.angular + aceleracao.angular * tempo
+	• a aceleração (linear e angular) pode ser constante ou ser calculada para: a) simular uma perseguição, ou 
+	b) simular uma interação, do tipo “jogo”, com o utilizador (onde o utilizador controla o movimento).
+
+
+Cada objeto móvel tem uma figura geométrica que define o aspeto visual.
+
+Os movimentos devem ser mantidos em histórico para visualizar as trajetórias no QGIS.
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Objectivos base:
+------------------------------------------------------------------------------------------------------------------------------------------
+
+1. Desenhar modelo EA normal (numa fase inicial)
+	1.1 Desenhar o modelo EA estendido com pictogramas espaciais (EA-EPE) (fase final)
+
+2. Implementar o modelo em 1.1
+
+3. Implementar o comportamento dos objetos móveis e das correspondentes figuras geométricas
+
+4. Pelo menos:
+	-> 2 tipos de terreno, 2 terrenos de cada tipo
+	-> 2 objetos móveis com as figuras geométricas
+	-> Registar trajeto dos 2 objetos e das suas figuras geométricas
+	-> Mostrar o efeito sobre a velocidade da passagem sobre terrenos e rios
+
+5. Os objetos móveis têm velocidade máxima e aceleração máxima nunca excedidas
+	5.1 Valores registados na base de dados
+	5.2 Qualquer trajetória garante sempre estas restrições de velocidade e aceleração máximas
+
+
+6. Um objeto pode perseguir outro (manter registo de quem persegue quem). 
+	6.1 O modelo EA-EPE deve representar a perseguição
+	6.2 Construir trajetória de perseguição
+	6.3 formulação do perseguidor:
+		• aceleracao := normalizar( alvo.g_posicao – perseguidor.g_posicao ) * boost
+
+	6.3.1 
+		Alvo: Objeto a ser perseguido
+		Perseguidor: Objeto que o persegue
+		Boost: Incremento à aceleração (positivo ou negativo)
+
+	6.3.2 O objeto perseguido NÃO FOGE do perseguidor (não sabe que está a ser perseguido)
