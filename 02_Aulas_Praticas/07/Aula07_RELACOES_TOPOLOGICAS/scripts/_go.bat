@@ -1,10 +1,6 @@
 @ECHO OFF
 :: [PTS: AJUSTAR]
-<<<<<<< Updated upstream
-set psqlPath="C:\Program Files\PostgreSQL\14\bin"
-=======
-set psqlPath="C:\Program Files\PostgreSQL\16\bin"
->>>>>>> Stashed changes
+set psqlPath="C:\myApp\PostgreSQL\10\bin"
 
 :: Base de Dados e nome do utilizador
 SET dataBase=postgres

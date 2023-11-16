@@ -29,10 +29,15 @@ C:\Program Files\PostgreSQL\14\bin\raster2pgsql.exe -?
 -- C:\Program Files\PostgreSQL\14\bin\raster2pgsql raster_options_go_here raster_file someschema.sometable > out.sql
 
 
+-- C:\Program Files\PostgreSQL\16\bin
 -- povoar com o raster_ilhaDasFlores_1.tif
+<<<<<<< Updated upstream
 -- "C:\Program Files\PostgreSQL\14\bin\raster2pgsql" -s 4236 -I -d -M .\raster_ilhaDasFlores_1.tif T_RASTER > out_raster.txt
 
 C:\Program Files\PostgreSQL\14\bin\raster2pgsql -s 4236 -I -d -M .\raster_ilhaDasFlores_1.tif T_RASTER > out_raster.txt
+=======
+"C:\Program Files\PostgreSQL\16\bin\raster2pgsql" -s 4236 -I -d -M .\raster_ilhaDasFlores_1.tif T_RASTER > out_raster.txt
+>>>>>>> Stashed changes
 type .\scripts\_script_CONNECT_INIT_BD.txt out_raster.txt > .\scripts\01_script_POVOAR_T_RASTER.txt
 
 cd .\scripts
@@ -44,7 +49,7 @@ cd ..
 -- nesta execucao nao se usa a opcao "-d" (para nao se fazer "drop" 'a tabela que suporta o raster)
 -- nesta execucao usa-se a opcao "-a" (para fazer "append" a uma tabela ja' existente)
 -- nesta execucao tambem nao se usa a opcao "-I" pois o indice ja' foi construido
-C:\myApp\PostgreSQL\10\bin\raster2pgsql -s 4236 -a -M .\raster_ilhaDasFlores_2.tif T_RASTER > out_raster.txt
+"C:\Program Files\PostgreSQL\16\bin\raster2pgsql" -s 4236 -a -M .\raster_ilhaDasFlores_2.tif T_RASTER > out_raster.txt
 type .\scripts\_script_CONNECT_INIT_BD.txt out_raster.txt > .\scripts\01_script_POVOAR_T_RASTER.txt
 
 cd .\scripts
