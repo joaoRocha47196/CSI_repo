@@ -1,0 +1,53 @@
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis_world
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+--==========================
+--==========================
+
+-----------------------------
+-----------------------------
+-- Simulacao de trajectorias:
+-- [1] Iniciacao dos dados
+-----------------------------
+-----------------------------
+DELETE FROM cinematica_hist;
+DELETE FROM cinematica;
+
+--________________________________________________
+-- Inserir dados para caracterizacao da cinematica
+--________________________________________________
+--<COMPLETAR>
+
+
+--------------------------------------------
+--------------------------------------------
+-- Simulacao de trajectorias:
+--------------------------------------------
+--------------------------------------------
+
+CREATE OR REPLACE FUNCTION simular_trajetorias(iteracoes integer)
+RETURNS integer
+AS $$
+BEGIN
+    FOR i IN 1..iteracoes LOOP
+        SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
+        FROM cinematica;
+
+        -- (B)
+        UPDATE cinematica
+        SET velocidade = novo_velocidade( velocidade, aceleracao, 1 );
+
+        UPDATE cinematica
+        SET g_posicao = novo_posicao( g_posicao, velocidade, 1 );
+
+        UPDATE cinematica
+        SET orientacao = novo_orientacao( orientacao, velocidade, 1 );
+    END LOOP;
+RETURN iteracoes;
+END
+$$ LANGUAGE plpgsql;

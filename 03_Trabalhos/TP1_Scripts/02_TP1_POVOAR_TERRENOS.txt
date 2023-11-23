@@ -1,0 +1,55 @@
+--=============
+-- Ligação à BD
+--=============
+\set dataBase my_gis_world
+;
+\set userName postgres
+;
+\connect :dataBase :userName
+--==========================
+--==========================
+
+
+-- Eliminar Dados (anteriores)
+--=============================
+DELETE FROM gps_ponto;
+DELETE FROM TERRENO;
+DELETE FROM TIPO_TERRENO;
+---------------------------------
+
+
+----------------------------
+-- Povoar Dados
+----------------------------
+-- TIPO_TERRENO
+----------------------------
+INSERT INTO tipo_terreno( nome )
+VALUES
+    ('Mundo'),
+    ('Montanha'),
+    ('Planicie'),
+    ('Deserto'),
+    ('Vale'),
+    ('Floresta'),
+;
+
+----------------------------
+-- TERRENO
+----------------------------
+INSERT INTO terreno( id_terreno, nome )
+VALUES
+    (0, 'Mundo'),
+    (1, 'Montanha'),
+    (2, 'Planicie'),
+    (3, 'Deserto'),
+    (4, 'Vale'),
+    (5, 'Floresta'),
+;
+
+
+----------------------------
+-- GPS_PONTO
+----------------------------
+
+--<COMPLETAR EXPORTANDO OS VALORES DO QGIS>
+--INSERT INTO gps_ponto VALUES (1, 1, ST_MakePoint(-1.21383647798742, 0.534591194968554) );
