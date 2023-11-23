@@ -36,14 +36,18 @@ VALUES
 ----------------------------
 -- TERRENO
 ----------------------------
-INSERT INTO terreno( id_terreno, nome )
+INSERT INTO terreno( id_terreno, nome, hierarquia)
 VALUES
-    (0, 'Mundo'),
-    (1, 'Montanha'),
-    (2, 'Planicie'),
-    (3, 'Deserto'),
-    (4, 'Vale'),
-    (5, 'Floresta'),
+    (0, 'Mundo', 0),
+
+    (1, 'Montanha', 1),
+    (2, 'Floresta', 2),
+    (3, 'Rio', 3),
+
+    (4, 'Planice', 1),
+    (5, 'Floresta', 2),
+    (6, 'Deserto', 3),
+    (7, 'Rio', 4),
 ;
 
 
