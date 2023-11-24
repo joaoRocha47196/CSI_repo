@@ -75,6 +75,7 @@ RETURNS integer
 AS $$
 BEGIN
     FOR i IN 1..iteracoes LOOP
+        INSERT INTO cinematica_hist
         SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
         FROM cinematica;
 

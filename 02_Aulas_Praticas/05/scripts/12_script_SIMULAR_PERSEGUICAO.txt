@@ -94,6 +94,40 @@ WHERE id = pp.id_perseguidor;
 --________________________________________________________________________________________________
 
 
+CREATE OR REPLACE FUNCTION simular_perseguicao(iteracoes integer)
+RETURNS integer
+AS $$
+BEGIN
+    FOR i IN 1..iteracoes LOOP
+        INSERT INTO cinematica_hist
+        SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
+        FROM cinematica;
+
+        -- (B)
+        UPDATE cinematica
+        SET aceleracao = obter_aceleracao_perseguidor( pp.id_perseguidor, pp.id_alvo, 1 )
+        FROM pp
+        WHERE id = pp.id_perseguidor;
+
+        UPDATE cinematica
+        SET velocidade = novo_velocidade( velocidade, aceleracao, 1 )
+        FROM pp
+        WHERE id = pp.id_perseguidor;
+
+        UPDATE cinematica
+        SET g_posicao = novo_posicao( g_posicao, velocidade, 1 )
+        FROM pp
+        WHERE id = pp.id_perseguidor;
+
+        UPDATE cinematica
+        SET orientacao = novo_orientacao( orientacao, velocidade, 1 )
+        FROM pp
+        WHERE id = pp.id_perseguidor;
+    END LOOP;
+RETURN iteracoes;
+END
+$$ LANGUAGE plpgsql;
+
 
 
 
