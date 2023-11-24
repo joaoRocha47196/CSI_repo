@@ -17,7 +17,15 @@ DELETE FROM perseguicao;
 DROP TABLE IF EXISTS perseguicao CASCADE;
 DROP TABLE IF EXISTS objeto_hist CASCADE;
 DROP TABLE IF EXISTS objeto CASCADE;
+DROP TABLE IF EXISTS objeto_terreno CASCADE;
+DROP TABLE IF EXISTS tipo_objeto;
 
+
+CREATE TABLE tipo_objeto (
+    nome VARCHAR(20) PRIMARY KEY,
+    velocidade_max real NOT NULL,
+    aceleracao_max real NOT NULL
+);
 
 CREATE TABLE objeto(
     id INTEGER PRIMARY KEY,
@@ -29,12 +37,6 @@ CREATE TABLE objeto(
 );
 SELECT AddGeometryColumn( '', 'objeto', 'g_posicao', 3763, 'POINT', 2 );
 
-
-CREATE TABLE tipo_objeto (
-    nome VARCHAR(20) PRIMARY KEY,
-    velocidade_max real NOT NULL,
-    aceleracao_max real NOT NULL,
-);
 
 CREATE TABLE objeto_hist (
     id_hist SERIAL PRIMARY KEY,
@@ -54,7 +56,7 @@ CREATE TABLE objeto_terreno(
     FOREIGN KEY(nome_objeto) REFERENCES tipo_objeto(nome),
     FOREIGN KEY(nome_terreno) REFERENCES tipo_terreno(nome),
     CONSTRAINT pk_objeto_terreno PRIMARY KEY (nome_terreno, nome_objeto)
-)
+);
 
 CREATE TABLE perseguicao(
     id_perseguidor INTEGER REFERENCES objeto(id),

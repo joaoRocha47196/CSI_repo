@@ -12,7 +12,7 @@
 
 DROP TABLE IF EXISTS gps_ponto;
 DROP TABLE IF EXISTS terreno;
-DROP TABLE IF EXISTS tipo_terreno;
+DROP TABLE IF EXISTS tipo_terreno CASCADE;
 
 
 ---------------------------------
