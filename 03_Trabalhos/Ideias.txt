@@ -1,0 +1,11 @@
+Para simular o movimento:
+
+LOOP:
+	UPDATE velocidade, posicao, orientacao da cinematica (VERIFICAR O TERRENO ONDE ESTÁ SITUADA)
+	UPDATE posicao do perseguidor
+	UPDATE geometria_objeto para sobrepor posicao dos objetos às da cinematica
+FIM DO LOOP
+
+
+	
+	
