@@ -73,9 +73,6 @@ BEGIN
         SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
         FROM cinematica;
 
-        -- (B)
-        UPDATE cinematica
-        SET velocidade = novo_velocidade( velocidade, aceleracao, 1 );
 
         -- Get the new position based on the updated velocity
         SELECT novo_posicao(cinematica.g_posicao, cinematica.velocidade, 1) FROM cinematica INTO new_pos;
@@ -83,19 +80,33 @@ BEGIN
         -- Check if the new position is within the Mundo geometry
         IF NOT ST_Within(new_pos, mundo_geo) THEN
 
-            -- Invert the orientation (N ESTA A DAR, A ORIENTACAO N TA A INVERTER)
+            -- Invert the orientation
             UPDATE cinematica
             SET orientacao = novo_orientacao(orientacao , velocidade, 1) + PI();
 
+            -- (B) Invert velocidade
+            UPDATE cinematica c
+            SET velocidade = (
+                (c.velocidade).linear * -1.0,
+                (c.velocidade).angular
+            );
+
             -- Recalculate the new position with the updated orientation
             SELECT novo_posicao(cinematica.g_posicao, cinematica.velocidade, 1) FROM cinematica INTO new_pos;
+        -- If within, update velocidade and orientacao
+        ELSE
+            UPDATE cinematica
+            SET velocidade = novo_velocidade( velocidade, aceleracao, 1 );
+
+            UPDATE cinematica
+            SET orientacao = novo_orientacao(orientacao , velocidade, 1);
         END IF;
 
         -- Update the g_posicao with the new position
         UPDATE cinematica
         SET g_posicao = new_pos;
 
-        -- (C) Update the position of objetto_movel based on cinematica table
+        -- (C) Update the position of objeto_movel based on cinematica table
         UPDATE objeto_movel om
         SET geo = ST_Translate(om.geo, ST_X(c.g_posicao) - ST_X(ST_Centroid(om.geo)), ST_Y(c.g_posicao) - ST_Y(ST_Centroid(om.geo)))
         FROM cinematica c
