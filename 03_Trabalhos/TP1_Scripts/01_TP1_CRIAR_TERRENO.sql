@@ -33,7 +33,8 @@ CREATE TABLE terreno (
     hierarquia INTEGER NOT NULL,
     FOREIGN KEY (nome) REFERENCES tipo_terreno (nome)             
 );
-SELECT AddGeometryColumn('', 'terreno', 'geo_terreno', 0, 'POLYGON', 2);
+SELECT AddGeometryColumn('', 'terreno', 'geo_terreno', 3763, 'POLYGON', 2);
+
 
 
 
