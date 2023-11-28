@@ -36,6 +36,18 @@ ROW( ROW( 0.5, 3 ), 1.0 ),
 ST_GeomFromText( 'POINT( 5 6 )', 3763 )
 );
 
+
+INSERT INTO cinematica( id, nome, orientacao, velocidade, aceleracao, g_posicao ) VALUES(
+2,
+'Mota',
+0.0,
+ROW( ROW( 1, 1 ), 0.3 ),
+ROW( ROW( 2, 0.5 ), 1.0 ),
+ST_GeomFromText( 'POINT( 2 3 )', 3763 )
+);
+
+
+/*
 INSERT INTO cinematica( id, g_posicao, orientacao, velocidade, aceleracao ) VALUES(
 2,
 ST_GeomFromText( 'POINT( 2 3 )', 3763 ),
@@ -43,6 +55,7 @@ ST_GeomFromText( 'POINT( 2 3 )', 3763 ),
 ROW( ROW( 1, 1 ), 0.3 ),
 ROW( ROW( 2, 0.5 ), 1.0 )
 );
+*/
 
 INSERT INTO objeto_movel( id, id_cinematica, nome, geo ) VALUES (
 1,
@@ -52,6 +65,17 @@ ST_GeomFromText( 'POLYGON( ( 0 0, 2 0, 2 1, 0 1, 0 0 ) )', 3763 )
 );
 
 
+
+INSERT INTO objeto_movel( id, id_cinematica, nome, geo ) VALUES (
+2,
+2,
+'Mota',
+ST_GeomFromText( 'POLYGON( ( 0 0, 2 0, 2 1, 0 1, 0 0 ) )', 3763 )
+);
+
+
+
+
 --------------------------------------------
 --------------------------------------------
 -- Simulacao de trajectorias:
@@ -59,7 +83,7 @@ ST_GeomFromText( 'POLYGON( ( 0 0, 2 0, 2 1, 0 1, 0 0 ) )', 3763 )
 --------------------------------------------
 
 
-CREATE OR REPLACE FUNCTION simular_trajetorias(iteracoes integer)
+CREATE OR REPLACE FUNCTION simular_trajetorias(id_cinematica integer, iteracoes integer)
 RETURNS integer
 AS $$
 DECLARE
@@ -71,8 +95,8 @@ BEGIN
     FOR i IN 1..iteracoes LOOP
         INSERT INTO cinematica_hist
         SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
-        FROM cinematica;
-
+        FROM cinematica
+        WHERE id = id_cinematica;
 
         -- Get the new position based on the updated velocity
         SELECT novo_posicao(cinematica.g_posicao, cinematica.velocidade, 1) FROM cinematica INTO new_pos;
@@ -86,14 +110,17 @@ BEGIN
         END IF;
 
         UPDATE cinematica
-        SET velocidade = novo_velocidade( velocidade, aceleracao, 1 );
+        SET velocidade = novo_velocidade( velocidade, aceleracao, 1 )
+        WHERE id = id_cinematica;
 
         UPDATE cinematica
-        SET orientacao = novo_orientacao(orientacao , velocidade, 1);
+        SET orientacao = novo_orientacao(orientacao , velocidade, 1)
+        WHERE id = id_cinematica;
 
         -- Update the g_posicao with the new position
         UPDATE cinematica
-        SET g_posicao = new_pos;
+        SET g_posicao = new_pos
+        WHERE id = id_cinematica;
 
         -- (C) Update the position of objeto_movel based on cinematica table
         UPDATE objeto_movel om
@@ -106,6 +133,13 @@ RETURN iteracoes;
 END
 $$ LANGUAGE plpgsql;
 
+
+
+/*
+SELECT simular_trajetorias(1, 2);
+SELECT simular_trajetorias(2, 2);
+
+*/
 
 /*
 Função de teste para modularizar o trabalho
