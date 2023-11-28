@@ -79,28 +79,17 @@ BEGIN
 
         -- Check if the new position is within the Mundo geometry
         IF NOT ST_Within(new_pos, mundo_geo) THEN
-
-            -- Invert the orientation
-            UPDATE cinematica
-            SET orientacao = novo_orientacao(orientacao , velocidade, 1) + PI();
-
-            -- (B) Invert velocidade
-            UPDATE cinematica c
-            SET velocidade = (
-                (c.velocidade).linear * -1.0,
-                (c.velocidade).angular
-            );
-
-            -- Recalculate the new position with the updated orientation
-            SELECT novo_posicao(cinematica.g_posicao, cinematica.velocidade, 1) FROM cinematica INTO new_pos;
-        -- If within, update velocidade and orientacao
-        ELSE
-            UPDATE cinematica
-            SET velocidade = novo_velocidade( velocidade, aceleracao, 1 );
-
-            UPDATE cinematica
-            SET orientacao = novo_orientacao(orientacao , velocidade, 1);
+             -- Place cinematica in a random coordinate of 'Mundo'
+             -- Generate one point inside mundo geo with ST_GeneratePoints (returns MULTIPOINT)
+             -- And get 1st element with ST_GeometryN
+            SELECT ST_GeometryN(ST_GeneratePoints(mundo_geo, 1), 1) INTO new_pos;
         END IF;
+
+        UPDATE cinematica
+        SET velocidade = novo_velocidade( velocidade, aceleracao, 1 );
+
+        UPDATE cinematica
+        SET orientacao = novo_orientacao(orientacao , velocidade, 1);
 
         -- Update the g_posicao with the new position
         UPDATE cinematica
@@ -118,5 +107,20 @@ END
 $$ LANGUAGE plpgsql;
 
 
+/*
+Função de teste para modularizar o trabalho
+Exemplo:
+simular_trajetorias(1) do lider
+perseguir_lider()
+
+CREATE OR REPLACE FUNCTION teste()
+RETURNS void
+AS $$
+BEGIN
+   PERFORM simular_trajetorias(10);
+END
+$$ LANGUAGE plpgsql;
+*/
+
 -- Query que permite saber se a cinematica está dentro do mundo
-SELECT ST_Within((SELECT g_posicao FROM cinematica), (SELECT geo_terreno FROM terreno WHERE nome = 'Mundo'));
+-- SELECT ST_Within((SELECT g_posicao FROM cinematica), (SELECT geo_terreno FROM terreno WHERE nome = 'Mundo'));
