@@ -123,8 +123,10 @@ BEGIN
     -- Guarda velocidade maxima da cinematica em max_velocidade
     SELECT (velocidade_max).linear, (velocidade_max).angular FROM tipo_objeto t INNER JOIN cinematica c ON t.nome = c.nome WHERE c.id = id_cinematica INTO max_velocidade;
 
+    max_velocidade := comparar_velocidade(max_velocidade, (SELECT novo_velocidade(velocidade, aceleracao, 1) FROM cinematica WHERE id = id_cinematica));
+    RAISE NOTICE '%', max_velocidade;
     -- Falta testar comparar_velocidade 
-    -- SELECT comparar velocidade(('(1.0, 2.0)', 3.0)::t_velocidade, ('(0.5, 1.0)', 2.0)::t_velocidade);
+    -- SELECT comparar_velocidade((ROW( ROW( 1, 1 ), 0.3 )), (ROW( ROW( 1, 2 ), 0.3 )));
 
 
     -- =============================

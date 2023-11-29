@@ -67,10 +67,10 @@ DECLARE
     v_norm2 real;
     v_result t_velocidade;
 BEGIN
-    v_norm1 := normalizar_PLPGSQL(v1.linear);
-    v_norm2 := normalizar_PLPGSQL(v2.linear);
+    v_norm1 := power(power((v1.linear).x, 2) + power((v1.linear).y, 2) , 0.5);
+    v_norm2 := power(power((v2.linear).x, 2) + power((v2.linear).y, 2) , 0.5);
 
-        -- Compare the norms of the vectors
+    -- Compare the norms of the vectors
     IF v_norm1 < v_norm2 THEN
         -- Set v_result to v1 if v1 has a smaller norm
         v_result := v1;
