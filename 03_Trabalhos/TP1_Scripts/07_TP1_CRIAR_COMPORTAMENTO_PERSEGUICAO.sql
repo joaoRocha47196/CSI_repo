@@ -15,6 +15,7 @@
 DROP VIEW IF EXISTS v_novo_cinematica;
 DROP FUNCTION IF EXISTS novo_aceleracao_linear( geometry, geometry, real );
 DROP FUNCTION IF EXISTS obter_aceleracao_perseguidor( int, int, real );
+DROP FUNCTION IF EXISTS comparar_velocidade(t_velocidade, t_velocidade)
 
 
 --______________________________________________________________________________________________
@@ -54,4 +55,31 @@ SELECT novo_aceleracao_linear( c_perseguidor.g_posicao, c_alvo.g_posicao, $3 ), 
 FROM cinematica c_perseguidor, cinematica c_alvo
 WHERE c_perseguidor.id = $1 and c_alvo.id = $2;
 $$ LANGUAGE 'sql';
+
+--______________________________________________________________________________________________
+-- Comparar duas velocidades
+--______________________________________________________________________________________________
+CREATE OR REPLACE FUNCTION comparar_velocidade(v1 t_velocidade, v2 t_velocidade)
+RETURNS t_velocidade
+AS $$
+DECLARE
+    v_norm1 real;
+    v_norm2 real;
+    v_result t_velocidade;
+BEGIN
+    v_norm1 := normalizar_PLPGSQL(v1.linear);
+    v_norm2 := normalizar_PLPGSQL(v2.linear);
+
+        -- Compare the norms of the vectors
+    IF v_norm1 < v_norm2 THEN
+        -- Set v_result to v1 if v1 has a smaller norm
+        v_result := v1;
+    ELSE
+        -- Set v_result to v2 if v2 has a smaller norm or equal norm
+        v_result := v2;
+    END IF;
+
+    RETURN v_result;
+END
+$$ LANGUAGE plpgsql;
 

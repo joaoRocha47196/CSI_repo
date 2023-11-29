@@ -7,28 +7,27 @@
 ;
 \connect :dataBase :userName
 --==========================
-
+DROP TABLE IF EXISTS objeto_terreno CASCADE;
+DROP TABLE IF EXISTS objeto_movel;
+DROP TABLE IF EXISTS tipo_objeto;
 DELETE FROM gps_ponto;
 DELETE FROM TERRENO;
 DELETE FROM TIPO_TERRENO;
 DROP VIEW IF EXISTS V_POLIGONO;
 DROP VIEW IF EXISTS V_LINHA_CONTORNO;
 
-DELETE FROM tipo_objeto;
 
-DELETE FROM perseguicao;
 DROP TABLE IF EXISTS perseguicao CASCADE;
 DROP TABLE IF EXISTS cinematica_hist CASCADE;
 DROP TABLE IF EXISTS cinematica CASCADE;
-DROP TABLE IF EXISTS objeto_terreno CASCADE;
-DROP TABLE IF EXISTS objeto_movel;
-DROP TABLE IF EXISTS tipo_objeto;
+
 
 DROP FUNCTION IF EXISTS novo_posicao( geometry, t_velocidade, real );
 DROP FUNCTION IF EXISTS novo_orientacao( real, t_velocidade, real );
 DROP FUNCTION IF EXISTS novo_velocidade( t_velocidade, t_aceleracao, real );
 DROP FUNCTION IF EXISTS novo_aceleracao_linear( geometry, geometry, real );
 DROP FUNCTION IF EXISTS obter_aceleracao_perseguidor( int, int, real );
+DROP FUNCTION IF EXISTS comparar_velocidade(t_velocidade, t_velocidade)
 
 DROP TYPE IF EXISTS t_velocidade;
 DROP TYPE IF EXISTS t_aceleracao;
