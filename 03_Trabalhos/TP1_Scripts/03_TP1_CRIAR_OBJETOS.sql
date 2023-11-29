@@ -72,6 +72,8 @@ CREATE TABLE perseguicao(
     PRIMARY KEY (id_perseguidor, id_alvo)
 );
 
+
+
 --------------------------------------------------------------
 --------------------------------------------------------------
 -- Copiar dados de cinematica para historico (cinematica_hist)

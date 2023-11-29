@@ -19,10 +19,9 @@ DELETE FROM cinematica_hist;
 DELETE FROM objeto_movel;
 DELETE FROM cinematica;
 
---________________________________________________
--- Inserir dados para caracterizacao da cinematica
---________________________________________________
---<COMPLETAR>
+DROP FUNCTION simular_trajetorias;
+DROP FUNCTION update_cinematica;
+
 
 --________________________________________________
 -- Inserir dados para caracterizacao da cinematica
@@ -47,16 +46,6 @@ ST_GeomFromText( 'POINT( 2 3 )', 3763 )
 );
 
 
-/*
-INSERT INTO cinematica( id, g_posicao, orientacao, velocidade, aceleracao ) VALUES(
-2,
-ST_GeomFromText( 'POINT( 2 3 )', 3763 ),
-0.0,
-ROW( ROW( 1, 1 ), 0.3 ),
-ROW( ROW( 2, 0.5 ), 1.0 )
-);
-*/
-
 INSERT INTO objeto_movel( id, id_cinematica, nome, geo ) VALUES (
 1,
 1,
@@ -74,6 +63,10 @@ ST_GeomFromText( 'POLYGON( ( 0 0, 2 0, 2 1, 0 1, 0 0 ) )', 3763 )
 );
 
 
+-- Inserir dados para caracterizacao da perseguicao
+--_________________________________________________
+INSERT INTO perseguicao( id_perseguidor, id_alvo )
+VALUES( 1, 2 );
 
 
 --------------------------------------------
@@ -83,7 +76,7 @@ ST_GeomFromText( 'POLYGON( ( 0 0, 2 0, 2 1, 0 1, 0 0 ) )', 3763 )
 --------------------------------------------
 
 
-CREATE OR REPLACE FUNCTION simular_trajetorias(id_cinematica integer, iteracoes integer)
+CREATE OR REPLACE FUNCTION simular_trajetorias(id_alvo integer, iteracoes integer)
 RETURNS integer
 AS $$
 DECLARE
@@ -95,11 +88,10 @@ BEGIN
     FOR i IN 1..iteracoes LOOP
         INSERT INTO cinematica_hist
         SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
-        FROM cinematica
-        WHERE id = id_cinematica;
+        FROM cinematica;
 
         -- Get the new position based on the updated velocity
-        SELECT novo_posicao(cinematica.g_posicao, cinematica.velocidade, 1) FROM cinematica INTO new_pos;
+        SELECT novo_posicao(g_posicao, velocidade, 1) FROM cinematica WHERE id = id_alvo INTO new_pos;
 
         -- Check if the new position is within the Mundo geometry
         IF NOT ST_Within(new_pos, mundo_geo) THEN
@@ -109,27 +101,73 @@ BEGIN
             SELECT ST_GeometryN(ST_GeneratePoints(mundo_geo, 1), 1) INTO new_pos;
         END IF;
 
-        UPDATE cinematica
-        SET velocidade = novo_velocidade( velocidade, aceleracao, 1 )
-        WHERE id = id_cinematica;
-
-        UPDATE cinematica
-        SET orientacao = novo_orientacao(orientacao , velocidade, 1)
-        WHERE id = id_cinematica;
-
-        -- Update the g_posicao with the new position
-        UPDATE cinematica
-        SET g_posicao = new_pos
-        WHERE id = id_cinematica;
-
-        -- (C) Update the position of objeto_movel based on cinematica table
-        UPDATE objeto_movel om
-        SET geo = ST_Translate(om.geo, ST_X(c.g_posicao) - ST_X(ST_Centroid(om.geo)), ST_Y(c.g_posicao) - ST_Y(ST_Centroid(om.geo)))
-        FROM cinematica c
-        WHERE om.id_cinematica = c.id;
+        -- Update cinematica of objetos
+        PERFORM update_cinematica(id_alvo, new_pos);
 
     END LOOP;
 RETURN iteracoes;
+END
+$$ LANGUAGE plpgsql;
+
+
+-- Função auxiliar para fazer update à cinematica de um objeto
+CREATE OR REPLACE FUNCTION update_cinematica(id_cinematica integer, new_pos geometry)
+RETURNS void
+AS $$
+DECLARE
+    new_pos_follower geometry;
+BEGIN
+
+    -- =============================
+    -- ALVO
+    -- =============================
+    -- Falta verificar se a nova velocidade é superior à velocidade maxima definida
+    -- Se sim, estagnar a velocidade na velocidade máxima (não sei como fazer visto que vmax é real)
+    UPDATE cinematica
+    SET velocidade = novo_velocidade( velocidade, aceleracao, 1 )
+    WHERE id = id_cinematica;
+
+    UPDATE cinematica
+    SET orientacao = novo_orientacao(orientacao , velocidade, 1)
+    WHERE id = id_cinematica;
+
+    -- Update the g_posicao with the new position
+    UPDATE cinematica
+    SET g_posicao = new_pos
+    WHERE id = id_cinematica;
+
+    -- ==================================
+    -- SEGUIDOR (N ESTA A FUNCIONAR BEM PQ ELE SAI DO MAPA)
+    -- NAO FAÇO IDEIA COMO RESOLVER
+    -- ==================================
+
+    UPDATE cinematica
+    SET aceleracao = obter_aceleracao_perseguidor( pp.id_perseguidor, id_cinematica, 1 )
+    FROM perseguicao pp
+    WHERE id = pp.id_perseguidor;
+
+    UPDATE cinematica
+    SET velocidade = novo_velocidade( velocidade, aceleracao, 1 )
+    FROM perseguicao pp
+    WHERE id = pp.id_perseguidor;
+
+
+    UPDATE cinematica
+    SET g_posicao = novo_posicao( g_posicao, velocidade, 1 )
+    FROM perseguicao pp
+    WHERE id = pp.id_perseguidor;
+
+    UPDATE cinematica
+    SET orientacao = novo_orientacao( orientacao, velocidade, 1 )
+    FROM perseguicao pp
+    WHERE id = pp.id_perseguidor;
+
+    -- (C) Update the position of objeto_movel based on cinematica table
+    UPDATE objeto_movel om
+    SET geo = ST_Translate(om.geo, ST_X(c.g_posicao) - ST_X(ST_Centroid(om.geo)), ST_Y(c.g_posicao) - ST_Y(ST_Centroid(om.geo)))
+    FROM cinematica c
+    WHERE om.id_cinematica = c.id;
+
 END
 $$ LANGUAGE plpgsql;
 

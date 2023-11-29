@@ -33,12 +33,8 @@ DECLARE
     vector t_vector;
     aceleracao t_vector;
 BEGIN
-    vector := ST_MakePoint(
-        ST_X($2) - ST_X($1),
-        ST_Y($2) - ST_Y($1)
-    ) As t_vector;
-
-    aceleracao := normalizar_PLPGSQL(vector);
+    vector := cast((ST_X($2) - ST_X($1), ST_Y($2) - ST_Y($1)) as t_vector) ;
+    aceleracao := normalizar_PLPGSQL(vector) * velocidade_a_perseguir;
 
     RETURN aceleracao;
 END
@@ -58,3 +54,4 @@ SELECT novo_aceleracao_linear( c_perseguidor.g_posicao, c_alvo.g_posicao, $3 ), 
 FROM cinematica c_perseguidor, cinematica c_alvo
 WHERE c_perseguidor.id = $1 and c_alvo.id = $2;
 $$ LANGUAGE 'sql';
+

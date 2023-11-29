@@ -38,6 +38,12 @@ DROP FUNCTION IF EXISTS soma_vector_vector( t_vector, t_vector );
 DROP FUNCTION IF EXISTS normalizar( t_vector );
 DROP TYPE IF EXISTS t_vector;
 
+DROP FUNCTION simular_trajetorias;
+DROP FUNCTION update_cinematica;
+
+DROP FUNCTION IF EXISTS novo_aceleracao_linear( geometry, geometry, real );
+DROP FUNCTION IF EXISTS obter_aceleracao_perseguidor( int, int, real );
+
 DROP TABLE IF EXISTS gps_ponto;
 DROP TABLE IF EXISTS terreno;
 DROP TABLE IF EXISTS tipo_terreno CASCADE;

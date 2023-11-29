@@ -60,7 +60,7 @@ FROM cinematica c_origem, cinematica c_destino
 WHERE c_origem.id = 1 and c_destino.id = 2;
 -- resultado:
 -- (0.526234, 1.92953)
- 
+
 
 
 --______________________________________________________________________________________________
