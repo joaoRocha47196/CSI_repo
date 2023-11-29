@@ -24,12 +24,12 @@ DELETE FROM objeto_terreno;
 ----------------------------
 INSERT INTO tipo_objeto(nome, velocidade_max, aceleracao_max)
 VALUES
-    ('Carro', ROW( ROW( 5, 5 ), 3 ), 30),
-    ('Mota', ROW( ROW( 7, 7 ), 3 ), 40),
-    ('Barco', ROW( ROW( 3, 3 ), 3 ), 15),
-    ('Mota-Agua', ROW( ROW( 5, 5 ), 3 ), 30),
-    ('Bicicleta', ROW( ROW( 2.5, 2.5 ), 3 ), 10),
-    ('Camiao', ROW( ROW( 3, 3 ), 3 ), 20)
+    ('Carro', ROW( ROW( 5, 5 ), 3 ), ROW( ROW( 1.5, 1.5 ), 3 )),
+    ('Mota', ROW( ROW( 7, 7 ), 3 ), ROW( ROW( 2, 2 ), 3 )),
+    ('Barco', ROW( ROW( 3, 3 ), 3 ), ROW( ROW( 1, 1 ), 3 )),
+    ('Mota-Agua', ROW( ROW( 5, 5 ), 3 ), ROW( ROW( 1.5, 1.5 ), 3 )),
+    ('Bicicleta', ROW( ROW( 2.5, 2.5 ), 3 ), ROW( ROW( 0.5, 0.5 ), 3 )),
+    ('Camiao', ROW( ROW( 3, 3 ), 3 ), ROW( ROW( 0.75, 0.75 ), 3 ))
 ;
 
 ----------------------------
@@ -82,4 +82,10 @@ VALUES
   ('Camiao', 'Vale', 0.5),
   ('Camiao', 'Rio', 0.05),
   ('Camiao', 'Planicie', 0.8);
+
+  CREATE OR REPLACE VIEW V_VMAX_AMAX_OBJETO(id, nome, velocidade_max) AS
+  SELECT c.id, t.nome, t.velocidade_max, t.aceleracao_max FROM tipo_objeto t
+  INNER JOIN cinematica c 
+  ON t.nome = c.nome;
+  
 

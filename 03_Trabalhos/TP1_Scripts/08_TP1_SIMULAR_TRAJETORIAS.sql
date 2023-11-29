@@ -47,6 +47,15 @@ ROW( ROW( 2, 0.5 ), 1.0 ),
 ST_GeomFromText( 'POINT( 2 3 )', 3763 )
 );
 
+INSERT INTO cinematica( id, nome, orientacao, velocidade, aceleracao, g_posicao ) VALUES(
+3,
+'Carro',
+0.0,
+ROW( ROW( 1, 1 ), 1.3 ),
+ROW( ROW( 0.5, 3 ), 1.0 ),
+ST_GeomFromText( 'POINT( 5 6 )', 3763 )
+);
+
 
 INSERT INTO objeto_movel( id, id_cinematica, nome, geo ) VALUES (
 1,
@@ -64,11 +73,21 @@ INSERT INTO objeto_movel( id, id_cinematica, nome, geo ) VALUES (
 ST_GeomFromText( 'POLYGON( ( 0 0, 2 0, 2 1, 0 1, 0 0 ) )', 3763 )
 );
 
+INSERT INTO objeto_movel( id, id_cinematica, nome, geo ) VALUES (
+3,
+3,
+'Carro',
+ST_GeomFromText( 'POLYGON( ( 0 0, 2 0, 2 1, 0 1, 0 0 ) )', 3763 )
+);
+
 
 -- Inserir dados para caracterizacao da perseguicao
 --_________________________________________________
 INSERT INTO perseguicao( id_perseguidor, id_alvo )
 VALUES( 1, 2 );
+
+INSERT INTO perseguicao( id_perseguidor, id_alvo )
+VALUES( 3, 2 );
 
 
 --------------------------------------------
@@ -84,13 +103,146 @@ AS $$
 DECLARE
     new_pos geometry;
     mundo_geo geometry;
+
+    current_row_id_rota int;
+    point_record geometry;
+    total_rows_rota int;
 BEGIN
+
+    SELECT COUNT(*)-1 FROM rota INTO total_rows_rota;
+
     SELECT geo_terreno INTO mundo_geo FROM terreno WHERE nome = 'Mundo';
 
     FOR i IN 1..iteracoes LOOP
+
+        -- Keep track of position in rota where id_cinematica last was
+        SELECT COUNT(g_posicao) - 1
+        FROM cinematica_hist
+        WHERE id = id_alvo
+        INTO current_row_id_rota;
+
+        -- Ensure current_row_id_rota is non-negative
+        IF current_row_id_rota < 0 THEN
+            current_row_id_rota := 0;
+        END IF;
+
+        RAISE NOTICE '%', current_row_id_rota;
+
+        -- Fetch the next point from the "rota" table
+        SELECT geo_ponto
+        FROM rota
+        WHERE id = current_row_id_rota
+        INTO point_record;
+
         INSERT INTO cinematica_hist
         SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
         FROM cinematica;
+
+        -- Move alvo in rota
+        UPDATE cinematica
+        SET g_posicao = point_record
+        WHERE id = id_alvo;
+
+        -- Update cinematica of objetos
+        PERFORM update_cinematica(id_alvo, new_pos);
+
+        -- (C) Update the position of objeto_movel based on cinematica table
+        UPDATE objeto_movel om
+        SET geo = ST_Translate(om.geo, ST_X(c.g_posicao) - ST_X(ST_Centroid(om.geo)), ST_Y(c.g_posicao) - ST_Y(ST_Centroid(om.geo)))
+        FROM cinematica c
+        WHERE om.id_cinematica = c.id;
+
+    END LOOP;
+RETURN iteracoes;
+END
+$$ LANGUAGE plpgsql;
+
+
+-- Função para fazer update à cinematica de um objeto
+CREATE OR REPLACE FUNCTION update_cinematica(id_cinematica integer, new_pos geometry)
+RETURNS void
+AS $$
+DECLARE
+    alvo_max_velocidade t_velocidade;
+    alvo_velocidade t_velocidade;
+BEGIN
+
+    -- Guarda velocidade maxima da cinematica do alvo em alvo_max_velocidade
+    SELECT (velocidade_max).linear, (velocidade_max).angular FROM tipo_objeto t INNER JOIN cinematica c ON t.nome = c.nome WHERE c.id = id_cinematica INTO alvo_max_velocidade;
+
+    -- Determinar velocidade atualizada do alvo
+    alvo_velocidade := comparar_velocidade(alvo_max_velocidade, (SELECT novo_velocidade(velocidade, aceleracao, 1) FROM cinematica WHERE id = id_cinematica));
+
+    -- =============================
+    -- ALVO
+    -- =============================
+    UPDATE cinematica
+    SET velocidade = alvo_velocidade
+    WHERE id = id_cinematica;
+
+    UPDATE cinematica
+    SET orientacao = novo_orientacao(orientacao , velocidade, 1)
+    WHERE id = id_cinematica;
+
+    -- ==================================
+    -- SEGUIDOR
+    -- ==================================
+
+    /*
+    INSERT INTO cinematica_hist
+    SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
+    FROM cinematica;
+    */
+
+    UPDATE cinematica
+    SET aceleracao = obter_aceleracao_perseguidor( pp.id_perseguidor, id_cinematica, 2)
+    FROM perseguicao pp
+    WHERE id = pp.id_perseguidor;
+
+    -- Set velocidade maxima on perseguidor
+    WITH updated_cinematica AS (
+    SELECT
+        c.id,
+        c.nome,
+        CASE
+        WHEN comparar_velocidade(novo_velocidade(c.velocidade, c.aceleracao, 1), v.velocidade_max) = novo_velocidade(c.velocidade, c.aceleracao, 1)
+        THEN novo_velocidade(c.velocidade, c.aceleracao, 1)
+        ELSE v.velocidade_max
+        END AS new_velocidade
+    FROM
+        cinematica c
+    JOIN
+        perseguicao pp ON c.id = pp.id_perseguidor
+    JOIN
+        V_VMAX_AMAX_OBJETO v ON c.nome = v.nome
+    )
+    UPDATE cinematica AS c
+    SET velocidade = u.new_velocidade
+    FROM updated_cinematica AS u
+    WHERE c.id = u.id;
+
+
+    -- Update posição do perseguidor
+    UPDATE cinematica
+    SET g_posicao = novo_posicao( g_posicao, velocidade, 1 )
+    FROM perseguicao pp
+    WHERE id = pp.id_perseguidor;
+
+    -- Update orientação do perseguidor
+    UPDATE cinematica
+    SET orientacao = novo_orientacao( orientacao, velocidade, 1 )
+    FROM perseguicao pp
+    WHERE id = pp.id_perseguidor;
+END
+$$ LANGUAGE plpgsql;
+
+
+
+-- Query que permite saber se a cinematica está dentro do mundo
+-- SELECT ST_Within((SELECT g_posicao FROM cinematica), (SELECT geo_terreno FROM terreno WHERE nome = 'Mundo'));
+
+-- FALTA METER O SEGUIDOR NUMA POSIÇÃO ALEATORIA DO MUNDO CASO SAIA
+/*
 
         -- Get the new position based on the updated velocity
         SELECT novo_posicao(g_posicao, velocidade, 1) FROM cinematica WHERE id = id_alvo INTO new_pos;
@@ -103,111 +255,4 @@ BEGIN
             SELECT ST_GeometryN(ST_GeneratePoints(mundo_geo, 1), 1) INTO new_pos;
         END IF;
 
-        -- Update cinematica of objetos
-        PERFORM update_cinematica(id_alvo, new_pos);
-
-    END LOOP;
-RETURN iteracoes;
-END
-$$ LANGUAGE plpgsql;
-
-
--- Função auxiliar para fazer update à cinematica de um objeto
-CREATE OR REPLACE FUNCTION update_cinematica(id_cinematica integer, new_pos geometry)
-RETURNS void
-AS $$
-DECLARE
-    max_velocidade t_velocidade;
-BEGIN
-
-    -- Guarda velocidade maxima da cinematica em max_velocidade
-    SELECT (velocidade_max).linear, (velocidade_max).angular FROM tipo_objeto t INNER JOIN cinematica c ON t.nome = c.nome WHERE c.id = id_cinematica INTO max_velocidade;
-
-    max_velocidade := comparar_velocidade(max_velocidade, (SELECT novo_velocidade(velocidade, aceleracao, 1) FROM cinematica WHERE id = id_cinematica));
-    RAISE NOTICE '%', max_velocidade;
-    -- Falta testar comparar_velocidade 
-    -- SELECT comparar_velocidade((ROW( ROW( 1, 1 ), 0.3 )), (ROW( ROW( 1, 2 ), 0.3 )));
-
-
-    -- =============================
-    -- ALVO
-    -- =============================
-    -- Falta verificar se a nova velocidade é superior à velocidade maxima definida
-    -- Se sim, estagnar a velocidade na velocidade máxima (não sei como fazer visto que vmax é real)
-    UPDATE cinematica
-    SET velocidade = novo_velocidade( velocidade, aceleracao, 1 )
-    WHERE id = id_cinematica;
-
-    UPDATE cinematica
-    SET orientacao = novo_orientacao(orientacao , velocidade, 1)
-    WHERE id = id_cinematica;
-
-    -- Update the g_posicao with the new position
-    UPDATE cinematica
-    SET g_posicao = new_pos
-    WHERE id = id_cinematica;
-
-    -- ==================================
-    -- SEGUIDOR (N ESTA A FUNCIONAR BEM PQ ELE SAI DO MAPA)
-    -- NAO FAÇO IDEIA COMO RESOLVER
-    -- ==================================
-
-    INSERT INTO cinematica_hist
-    SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
-    FROM cinematica;
-
-    UPDATE cinematica
-    SET aceleracao = obter_aceleracao_perseguidor( pp.id_perseguidor, id_cinematica, 2 )
-    FROM perseguicao pp
-    WHERE id = pp.id_perseguidor;
-
-    UPDATE cinematica
-    SET velocidade = novo_velocidade( velocidade, aceleracao, 1 )
-    FROM perseguicao pp
-    WHERE id = pp.id_perseguidor;
-
-
-    UPDATE cinematica
-    SET g_posicao = novo_posicao( g_posicao, velocidade, 1 )
-    FROM perseguicao pp
-    WHERE id = pp.id_perseguidor;
-
-    UPDATE cinematica
-    SET orientacao = novo_orientacao( orientacao, velocidade, 1 )
-    FROM perseguicao pp
-    WHERE id = pp.id_perseguidor;
-
-    -- (C) Update the position of objeto_movel based on cinematica table
-    UPDATE objeto_movel om
-    SET geo = ST_Translate(om.geo, ST_X(c.g_posicao) - ST_X(ST_Centroid(om.geo)), ST_Y(c.g_posicao) - ST_Y(ST_Centroid(om.geo)))
-    FROM cinematica c
-    WHERE om.id_cinematica = c.id;
-
-END
-$$ LANGUAGE plpgsql;
-
-
-
-/*
-SELECT simular_trajetorias(1, 2);
-SELECT simular_trajetorias(2, 2);
-
 */
-
-/*
-Função de teste para modularizar o trabalho
-Exemplo:
-simular_trajetorias(1) do lider
-perseguir_lider()
-
-CREATE OR REPLACE FUNCTION teste()
-RETURNS void
-AS $$
-BEGIN
-   PERFORM simular_trajetorias(10);
-END
-$$ LANGUAGE plpgsql;
-*/
-
--- Query que permite saber se a cinematica está dentro do mundo
--- SELECT ST_Within((SELECT g_posicao FROM cinematica), (SELECT geo_terreno FROM terreno WHERE nome = 'Mundo'));

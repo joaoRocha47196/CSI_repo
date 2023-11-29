@@ -15,7 +15,7 @@
 DROP VIEW IF EXISTS v_novo_cinematica;
 DROP FUNCTION IF EXISTS novo_aceleracao_linear( geometry, geometry, real );
 DROP FUNCTION IF EXISTS obter_aceleracao_perseguidor( int, int, real );
-DROP FUNCTION IF EXISTS comparar_velocidade(t_velocidade, t_velocidade)
+DROP FUNCTION IF EXISTS comparar_velocidade(t_velocidade, t_velocidade);
 
 
 --______________________________________________________________________________________________
