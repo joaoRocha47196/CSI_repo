@@ -24,12 +24,12 @@ DELETE FROM objeto_terreno;
 ----------------------------
 INSERT INTO tipo_objeto(nome, velocidade_max, aceleracao_max)
 VALUES
-    ('Carro', 20, 30),
-    ('Mota', 23, 40),
-    ('Barco', 10, 15),
-    ('Mota-Agua', 14, 30),
-    ('Bicicleta', 6, 10),
-    ('Camiao', 14, 20)
+    ('Carro', ROW( ROW( 5, 5 ), 3 ), 30),
+    ('Mota', ROW( ROW( 7, 7 ), 3 ), 40),
+    ('Barco', ROW( ROW( 3, 3 ), 3 ), 15),
+    ('Mota-Agua', ROW( ROW( 5, 5 ), 3 ), 30),
+    ('Bicicleta', ROW( ROW( 2.5, 2.5 ), 3 ), 10),
+    ('Camiao', ROW( ROW( 3, 3 ), 3 ), 20)
 ;
 
 ----------------------------

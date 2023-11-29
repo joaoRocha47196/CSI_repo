@@ -17,7 +17,9 @@
 -----------------------------
 DELETE FROM cinematica_hist;
 DELETE FROM objeto_movel;
+DELETE FROM perseguicao;
 DELETE FROM cinematica;
+
 
 DROP FUNCTION simular_trajetorias;
 DROP FUNCTION update_cinematica;
@@ -115,9 +117,11 @@ CREATE OR REPLACE FUNCTION update_cinematica(id_cinematica integer, new_pos geom
 RETURNS void
 AS $$
 DECLARE
-    new_pos_follower geometry;
+    max_velocidade t_velocidade;
 BEGIN
 
+    -- SELECT velocidade_max FROM tipo_objeto t INNER JOIN cinematica c ON t.nome = c.nome INTO max_velocidade;
+    --RAISE NOTICE 'MAX VELOCIDADE: %', velocidade_max;
     -- =============================
     -- ALVO
     -- =============================
@@ -141,8 +145,12 @@ BEGIN
     -- NAO FAÇO IDEIA COMO RESOLVER
     -- ==================================
 
+    INSERT INTO cinematica_hist
+    SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
+    FROM cinematica;
+
     UPDATE cinematica
-    SET aceleracao = obter_aceleracao_perseguidor( pp.id_perseguidor, id_cinematica, 1 )
+    SET aceleracao = obter_aceleracao_perseguidor( pp.id_perseguidor, id_cinematica, 2 )
     FROM perseguicao pp
     WHERE id = pp.id_perseguidor;
 

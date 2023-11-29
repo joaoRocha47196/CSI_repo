@@ -24,8 +24,17 @@ DROP TABLE IF EXISTS objeto_terreno CASCADE;
 DROP TABLE IF EXISTS objeto_movel;
 DROP TABLE IF EXISTS tipo_objeto;
 
+DROP FUNCTION IF EXISTS novo_posicao( geometry, t_velocidade, real );
+DROP FUNCTION IF EXISTS novo_orientacao( real, t_velocidade, real );
+DROP FUNCTION IF EXISTS novo_velocidade( t_velocidade, t_aceleracao, real );
+DROP FUNCTION IF EXISTS novo_aceleracao_linear( geometry, geometry, real );
+DROP FUNCTION IF EXISTS obter_aceleracao_perseguidor( int, int, real );
+
 DROP TYPE IF EXISTS t_velocidade;
 DROP TYPE IF EXISTS t_aceleracao;
+
+
+
 DROP OPERATOR IF EXISTS *( t_vector, real );
 DROP OPERATOR IF EXISTS *( real, t_vector );
 DROP OPERATOR IF EXISTS +( t_vector, t_vector );
@@ -41,8 +50,7 @@ DROP TYPE IF EXISTS t_vector;
 DROP FUNCTION simular_trajetorias;
 DROP FUNCTION update_cinematica;
 
-DROP FUNCTION IF EXISTS novo_aceleracao_linear( geometry, geometry, real );
-DROP FUNCTION IF EXISTS obter_aceleracao_perseguidor( int, int, real );
+
 
 DROP TABLE IF EXISTS gps_ponto;
 DROP TABLE IF EXISTS terreno;
