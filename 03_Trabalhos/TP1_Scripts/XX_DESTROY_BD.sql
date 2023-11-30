@@ -50,6 +50,7 @@ DROP TYPE IF EXISTS t_vector;
 
 DROP FUNCTION IF EXISTS simular_trajetorias;
 DROP FUNCTION IF EXISTS update_cinematica;
+DROP FUNCTION IF EXISTS update_cinematica_perseguidor;
 
 DROP TABLE IF EXISTS gps_ponto;
 DROP TABLE IF EXISTS terreno;
