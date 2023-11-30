@@ -256,3 +256,14 @@ $$ LANGUAGE plpgsql;
         END IF;
 
 */
+
+-- Query para saber em que terrenos um determinado id está inserido, com o seu efeito (provavelmente colocar numa view é melhor opção)
+-- Caso o mesmo ponto esteja em vários terrenos, retornar o terreno com maior hierarquia
+
+/*
+SELECT t.*, ot.efeito
+FROM terreno t
+INNER JOIN cinematica c ON ST_Within(c.g_posicao, t.geo_terreno)
+INNER JOIN objeto_terreno ot ON ot.nome_terreno = t.nome AND ot.nome_objeto = c.nome
+WHERE c.id = 2;
+*/
