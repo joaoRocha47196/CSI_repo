@@ -394,7 +394,6 @@ SELECT g_linha
 FROM V_ROTA_CONTORNO;
 
 
-
 ----------------------------
 -- VIEW V_POLIGONO
 -- 7 d

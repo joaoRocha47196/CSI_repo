@@ -59,24 +59,27 @@ $$ LANGUAGE 'sql';
 --______________________________________________________________________________________________
 -- Comparar duas velocidades
 --______________________________________________________________________________________________
-CREATE OR REPLACE FUNCTION comparar_velocidade(v1 t_velocidade, v2 t_velocidade)
+CREATE OR REPLACE FUNCTION comparar_velocidade(v1 t_velocidade, v_max real)
 RETURNS t_velocidade
 AS $$
 DECLARE
     v_norm1 real;
     v_norm2 real;
+    v_result_linear t_vector;
     v_result t_velocidade;
 BEGIN
     v_norm1 := power(power((v1.linear).x, 2) + power((v1.linear).y, 2) , 0.5);
-    v_norm2 := power(power((v2.linear).x, 2) + power((v2.linear).y, 2) , 0.5);
 
     -- Compare the norms of the vectors
-    IF v_norm1 < v_norm2 THEN
+    IF v_norm1 < v_max THEN
         -- Set v_result to v1 if v1 has a smaller norm
         v_result := v1;
     ELSE
-        -- Set v_result to v2 if v2 has a smaller norm or equal norm
-        v_result := v2;
+        -- Adjust v1 linear component to ratio between its norm and v_max
+        v_result_linear := (v1.linear) * cast((v_max / v_norm1) as real);
+        v_result_linear.x := TRUNC(v_result_linear.x::numeric,  2);
+        v_result_linear.y := TRUNC(v_result_linear.y::numeric, 2);
+        v_result := ((v_result_linear), (v1.angular));
     END IF;
 
     RETURN v_result;

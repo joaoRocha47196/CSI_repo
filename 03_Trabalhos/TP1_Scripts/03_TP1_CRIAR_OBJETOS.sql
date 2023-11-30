@@ -25,8 +25,8 @@ DROP TABLE IF EXISTS tipo_objeto;
 
 CREATE TABLE tipo_objeto (
     nome VARCHAR(20) PRIMARY KEY,
-    velocidade_max t_velocidade NOT NULL,
-    aceleracao_max t_aceleracao NOT NULL
+    velocidade_max real NOT NULL,
+    aceleracao_max real NOT NULL
 );
 
 CREATE TABLE objeto_terreno(
