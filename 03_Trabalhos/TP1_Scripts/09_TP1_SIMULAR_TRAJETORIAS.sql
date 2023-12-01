@@ -32,8 +32,7 @@ DECLARE
     total_rows_rota int;
 BEGIN
 
-    SELECT COUNT(*)-1 FROM rota INTO total_rows_rota;
-
+    SELECT COUNT(*) FROM rota INTO total_rows_rota;
     SELECT geo_terreno INTO mundo_geo FROM terreno WHERE nome = 'Mundo';
 
     FOR i IN 1..iteracoes LOOP
@@ -48,6 +47,10 @@ BEGIN
         IF current_row_id_rota < 0 THEN
             current_row_id_rota := 0;
         END IF;
+
+        -- Make sure it loops back the rota
+        current_row_id_rota := current_row_id_rota % total_rows_rota;
+
 
         -- Fetch the next point from the "rota" table
         SELECT geo_ponto
@@ -112,11 +115,6 @@ BEGIN
     perseguicao p
     ON c.id = p.id_perseguidor;
 
-    /*
-    INSERT INTO TAUX_ROTA_OBJETO( g_linha )
-    SELECT g_linha
-    FROM V_ROTA_OBJETO;
-    */
 
 END
 $$ LANGUAGE plpgsql;

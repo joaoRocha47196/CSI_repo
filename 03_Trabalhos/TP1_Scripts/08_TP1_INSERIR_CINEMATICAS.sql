@@ -83,16 +83,11 @@ JOIN cinematica c ON om.id_cinematica = c.id;
 
 
 CREATE VIEW V_ROTA_OBJETO(g_linha, id) AS
-    ( SELECT ST_MakeLine( x.g_posicao ), id::integer 
-    FROM ( SELECT g_posicao, id
-    FROM cinematica_hist
-    ORDER BY id_hist ) AS x
-    GROUP BY id 
+    ( SELECT ST_MakeLine( pontos_ordenados.g_posicao ), id::integer 
+    FROM ( SELECT g_posicao, id, id_hist 
+    FROM cinematica_hist 
+    ORDER BY id, id_hist ) AS pontos_ordenados
+    GROUP BY id
+    ORDER BY id
 );
 
-/*
-CREATE VIEW v_teste(id, media) AS
-    SELECT id, AVG(id_hist)
-    FROM (SELECT idcinematica_hist
-    GROUP BY id;
-*/

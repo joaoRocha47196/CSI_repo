@@ -32,7 +32,7 @@ DROP FUNCTION IF EXISTS novo_orientacao( real, t_velocidade, real );
 DROP FUNCTION IF EXISTS novo_velocidade( t_velocidade, t_aceleracao, real );
 DROP FUNCTION IF EXISTS novo_aceleracao_linear( geometry, geometry, real );
 DROP FUNCTION IF EXISTS obter_aceleracao_perseguidor( int, int, real );
-DROP FUNCTION IF EXISTS comparar_velocidade(t_velocidade, t_velocidade);
+DROP FUNCTION IF EXISTS comparar_velocidade(t_velocidade, real);
 
 DROP TYPE IF EXISTS t_velocidade;
 DROP TYPE IF EXISTS t_aceleracao;
