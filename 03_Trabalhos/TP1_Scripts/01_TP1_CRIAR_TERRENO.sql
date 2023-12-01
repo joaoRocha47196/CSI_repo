@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS gps_ponto;
 DROP TABLE IF EXISTS terreno;
 DROP TABLE IF EXISTS tipo_terreno CASCADE;
 DROP TABLE IF EXISTS rota;
-
+DROP TABLE IF EXISTS rio;
 
 ---------------------------------
 -- TIPO_TERRENO
@@ -35,6 +35,11 @@ CREATE TABLE terreno (
 );
 SELECT AddGeometryColumn('', 'terreno', 'geo_terreno', 3763, 'POLYGON', 2);
 
+CREATE TABLE rio (
+    id_rio SERIAL PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL
+);
+SELECT AddGeometryColumn('', 'rio', 'geo_linha', 3763, 'LINESTRING', 2);
 
 CREATE TABLE rota(
     id SERIAL PRIMARY KEY

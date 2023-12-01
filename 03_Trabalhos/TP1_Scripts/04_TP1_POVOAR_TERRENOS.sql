@@ -15,6 +15,7 @@
 DELETE FROM gps_ponto;
 DELETE FROM TERRENO;
 DELETE FROM TIPO_TERRENO;
+DELETE FROM rio;
 DELETE FROM rota;
 DROP VIEW IF EXISTS V_POLIGONO;
 DROP VIEW IF EXISTS V_LINHA_CONTORNO;
@@ -35,8 +36,7 @@ VALUES
     ('Planicie'),
     ('Deserto'),
     ('Vale'),
-    ('Floresta'),
-    ('Rio')
+    ('Floresta')
 ;
 
 ----------------------------
@@ -48,20 +48,163 @@ VALUES
 
     (1, 'Montanha', 1),
     (2, 'Floresta', 2),
-    (3, 'Rio', 3),
 
-    (4, 'Planicie', 1),
+    (3, 'Planicie', 1),
+    (4, 'Deserto', 2),
     (5, 'Floresta', 2),
-    (6, 'Deserto', 3),
-    (7, 'Rio', 4)
-;
+    (6, 'Vale', 3),
 
+    (7, 'Floresta', 1);
 
 ----------------------------
 -- GPS_PONTO
 ----------------------------
 
---<COMPLETAR EXPORTANDO OS VALORES DO QGIS>
+INSERT INTO gps_ponto VALUES
+    -- <MUNDO>
+    (0, 0, 'POINT(0 0)'),
+    (0, 1, 'POINT(150 0)'),
+    (0, 2, 'POINT(150 100)'),
+    (0, 3, 'POINT(0 100)'),
+    (0, 4, 'POINT(0 0)'),
+
+    -- <MONTANHA>
+    (1, 0, 'POINT(5.2608783239 97.5292103143)'),
+    (1, 1, 'POINT(3.9917405318 86.6146253022)'),
+    (1, 2, 'POINT(8.8144641418 72.0195406930)'),
+    (1, 3, 'POINT(21.6327558421 61.7395245770)'),
+    (1, 4, 'POINT(42.9542707494 59.7089041096)'),
+    (1, 5, 'POINT(60.3414585012 67.5775584206)'),
+    (1, 6, 'POINT(63.7681305399 81.4111603546)'),
+    (1, 7, 'POINT(72.5251813054 91.4373489122)'),
+    (1, 8, 'POINT(53.9957695407 97.2753827558)'),
+    (1, 9, 'POINT(38.5122884770 93.3410556003)'),
+    (1, 10, 'POINT(27.9784448026 97.6561240935)'),
+    (1, 11, 'POINT(15.6678082192 98.0368654311)'),
+    (1, 12, 'POINT(5.2608783239 97.5292103143)'),
+
+    -- <FLORESTA DENTRO MONTANHA >
+    (2, 0, 'POINT(11.5431103948 91.1200644641)'),
+    (2, 1, 'POINT(14.2082997583 79.5709105560)'),
+    (2, 2, 'POINT(28.2957292506 68.0217566479)'),
+    (2, 3, 'POINT(46.5713134569 70.5600322321)'),
+    (2, 4, 'POINT(57.8666398066 84.3936341660)'),
+    (2, 5, 'POINT(46.8251410153 89.7240128928)'),
+    (2, 6, 'POINT(31.5954875101 87.8203062047)'),
+    (2, 7, 'POINT(11.5431103948 91.1200644641)'),
+
+    -- <PLANICIE>
+    (3, 0, 'POINT(145.5006043513 6.2782030620)'),
+    (3, 1, 'POINT(144.9929492345 22.3962530218)'),
+    (3, 2, 'POINT(143.8507252216 40.7987510073)'),
+    (3, 3, 'POINT(143.5968976632 62.8817485898)'),
+    (3, 4, 'POINT(125.1943996777 75.5731265109)'),
+    (3, 5, 'POINT(119.7371071716 92.1988315874)'),
+    (3, 6, 'POINT(92.5775584206 84.2032634972)'),
+    (3, 7, 'POINT(80.5207493956 66.1815068493)'),
+    (3, 8, 'POINT(77.3479049154 50.5711120064)'),
+    (3, 9, 'POINT(63.5143029815 35.2145447220)'),
+    (3, 10, 'POINT(55.3283642224 21.8251410153)'),
+    (3, 11, 'POINT(78.6804995971 24.3634165995)'),
+    (3, 12, 'POINT(76.6498791297 4.4379532635)'),
+    (3, 13, 'POINT(93.7832393231 3.0419016922)'),
+    (3, 14, 'POINT(119.0390813860 3.8033843674)'),
+    (3, 15, 'POINT(145.5006043513 6.2782030620)'),
+
+    -- <DESERTO DENTRO PLANICE>
+    (4, 0, 'POINT(131.7304593070 13.4488315874)'),
+    (4, 1, 'POINT(136.6800966962 32.2320709106)'),
+    (4, 2, 'POINT(114.9778404512 37.5624496374)'),
+    (4, 3, 'POINT(94.9254633360 27.6631748590)'),
+    (4, 4, 'POINT(110.0282030620 16.7485898469)'),
+    (4, 5, 'POINT(131.7304593070 13.4488315874)'),
+
+    -- <FLORESTA DENTRO PLANICE>
+    (5, 0, 'POINT(79.1881547139 41.7506043513)'),
+    (5, 1, 'POINT(90.2296535052 36.0394842869)'),
+    (5, 2, 'POINT(109.5205479452 40.4814665592)'),
+    (5, 3, 'POINT(129.1921837228 43.0197421434)'),
+    (5, 4, 'POINT(137.6954069299 53.9343271555)'),
+    (5, 5, 'POINT(134.2687348912 64.5950846092)'),
+    (5, 6, 'POINT(120.4351329573 71.8291700242)'),
+    (5, 7, 'POINT(106.6015310234 71.9560838034)'),
+    (5, 8, 'POINT(93.2755842063 67.7679290894)'),
+    (5, 9, 'POINT(85.0261885576 54.3150684932)'),
+    (5, 10, 'POINT(79.1881547139 41.7506043513)'),
+
+    -- <VALE DENTRO DA FLORESTA DENTRO PLANICE>
+    (6, 0, 'POINT(121.9580983078 62.9452054795)'),
+    (6, 1, 'POINT(127.7961321515 56.7264302981)'),
+    (6, 2, 'POINT(117.7699435939 47.4617244158)'),
+    (6, 3, 'POINT(101.7788074134 48.0962933118)'),
+    (6, 4, 'POINT(106.8553585818 60.1531023368)'),
+    (6, 5, 'POINT(121.9580983078 62.9452054795)'),
+
+    -- <FLORESTA>
+    (7, 0, 'POINT(5.4512489927 60.2800161160)'),
+    (7, 1, 'POINT(5.5781627720 50.2538275584)'),
+    (7, 2, 'POINT(4.8166800967 33.8819500403)'),
+    (7, 3, 'POINT(5.0705076551 16.7485898469)'),
+    (7, 4, 'POINT(11.6700241741 6.2147461724)'),
+    (7, 5, 'POINT(31.3416599517 3.0419016922)'),
+    (7, 6, 'POINT(50.3787268332 5.5801772764)'),
+    (7, 7, 'POINT(62.1817082998 14.4641418211)'),
+    (7, 8, 'POINT(42.7639000806 17.1293311845)'),
+    (7, 9, 'POINT(49.7441579371 32.3589846898)'),
+    (7, 10, 'POINT(53.2977437550 45.6849315068)'),
+    (7, 11, 'POINT(45.5560032232 51.7767929089)'),
+    (7, 12, 'POINT(32.8646253022 53.8074133763)'),
+    (7, 13, 'POINT(16.7465753425 57.1071716358)'),
+    (7, 14, 'POINT(5.4512489927 60.2800161160)');
+
+----------------------------
+-- ADIÇÃO POLIGNO A TERRENO
+----------------------------
+CREATE VIEW V_LINHA_CONTORNO( g_linha, id_terreno ) AS 
+
+( SELECT ST_MakeLine( geo_ponto ), id_terreno 
+FROM ( SELECT geo_ponto, id_ordem, id_terreno 
+FROM gps_ponto 
+ORDER BY id_terreno, id_ordem ) AS pontos_ordenados 
+GROUP BY id_terreno 
+);
+
+CREATE VIEW V_POLIGONO( id_terreno, g_poligono ) AS
+SELECT id_terreno, ST_MakePolygon(g_linha)
+FROM V_LINHA_CONTORNO;
+
+UPDATE terreno
+SET geo_terreno = V_POLIGONO.g_poligono
+FROM V_POLIGONO
+WHERE terreno.id_terreno = V_POLIGONO.id_terreno;
+
+----------------------------
+-- RIO
+----------------------------
+INSERT INTO rio (id_rio, nome, geo_linha)
+VALUES (
+    1, 
+    'Rio Montanha', 
+    ST_GeomFromText('LINESTRING(
+        1.6762162005 73.5663177889, 
+        9.4563200025 80.3976284443, 
+        14.7695616234 88.7470081342, 
+        27.1038725289 92.9216979792, 
+        46.0797354605 93.1114566085, 
+        61.6399430645 91.4036289447, 
+        78.9079783322 87.4186977290, 
+        94.4681859362 92.5421807205, 
+        115.7211524196 80.9669043323, 
+        129.7632909890 68.2530761681, 
+        126.9169115492 52.1235926762, 
+        137.7331534202 46.2410751674, 
+        147.9801194033 42.0663853224)'
+    ));
+
+
+----------------------------
+-- ROTA
+----------------------------
 INSERT INTO ROTA VALUES
     (0, 'POINT(10 10)'),
     (1,'POINT(12.776987241342567 9.189125454796127)'),
@@ -352,32 +495,9 @@ INSERT INTO ROTA VALUES
     (286,'POINT(7.486683828569053 12.464075186513057)'),
     (287,'POINT(8.494360669097343 11.078519530786664)');
 
-
-
-
--- <MUNDO> AINDA PODE SER ALTERADO (OUTRO SHAPE)
-INSERT INTO gps_ponto VALUES (0, 0, 'POINT(0 0)');
-INSERT INTO gps_ponto VALUES (0, 1, 'POINT(150 0)');
-INSERT INTO gps_ponto VALUES (0, 2, 'POINT(150 100)');
-INSERT INTO gps_ponto VALUES (0, 3, 'POINT(0 100)');
-INSERT INTO gps_ponto VALUES (0, 4, 'POINT(0 0)');
-
-
---------------------------------------------------------
---------------------------------------------------------
--- PODE VIR A SER UTIL PARA REPRESENTAR OS POLIGONOS DOS TERRENOS
---------------------------------------------------------
---------------------------------------------------------
-
-CREATE VIEW V_LINHA_CONTORNO( g_linha, id_terreno ) AS 
-
-( SELECT ST_MakeLine( geo_ponto ), id_terreno 
-FROM ( SELECT geo_ponto, id_ordem, id_terreno 
-FROM gps_ponto 
-ORDER BY id_terreno, id_ordem ) AS pontos_ordenados 
-GROUP BY id_terreno 
-);
-
+----------------------------
+-- VIEWS ROTA
+----------------------------
 CREATE VIEW V_ROTA_CONTORNO(g_linha, id) AS
     ( SELECT ST_MakeLine( geo_ponto ), 1 
     FROM ( SELECT geo_ponto 
@@ -392,20 +512,4 @@ SELECT AddGeometryColumn
 INSERT INTO TAUX_LINHA_CONTORNO( g_linha )
 SELECT g_linha
 FROM V_ROTA_CONTORNO;
-
-
-----------------------------
--- VIEW V_POLIGONO
--- 7 d
-----------------------------
-CREATE VIEW V_POLIGONO( id_terreno, g_poligono ) AS
-SELECT id_terreno, ST_MakePolygon(g_linha)
-FROM V_LINHA_CONTORNO;
-
-
-UPDATE terreno
-SET geo_terreno = V_POLIGONO.g_poligono
-FROM V_POLIGONO
-WHERE terreno.id_terreno = V_POLIGONO.id_terreno;
-
 
