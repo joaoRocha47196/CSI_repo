@@ -65,7 +65,7 @@ AS $$
 DECLARE
     v_norm1 real;
     v_norm2 real;
-    v_result_linear t_vector;
+
     v_result t_velocidade;
 BEGIN
     v_norm1 := power(power((v1.linear).x, 2) + power((v1.linear).y, 2) , 0.5);
@@ -76,13 +76,12 @@ BEGIN
         v_result := v1;
     ELSE
         -- Adjust v1 linear component to ratio between its norm and v_max
-        v_result_linear := (v1.linear) * cast((v_max / v_norm1) as real);
-        v_result_linear.x := TRUNC(v_result_linear.x::numeric,  2);
-        v_result_linear.y := TRUNC(v_result_linear.y::numeric, 2);
-        v_result := ((v_result_linear), (v1.angular));
+        v_result := (v1) * cast((v_max / v_norm1) as real);
     END IF;
 
     RETURN v_result;
 END
 $$ LANGUAGE plpgsql;
+
+
 

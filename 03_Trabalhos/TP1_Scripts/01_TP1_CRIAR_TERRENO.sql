@@ -57,3 +57,5 @@ CREATE TABLE gps_ponto (
 );
 
 SELECT AddGeometryColumn('', 'gps_ponto', 'geo_ponto', 0, 'POINT', 2);
+
+

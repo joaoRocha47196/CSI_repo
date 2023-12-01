@@ -81,6 +81,12 @@ RETURN iteracoes;
 END
 $$ LANGUAGE plpgsql;
 
+--------------------------------------------
+--------------------------------------------
+-- Update de cinematicas:
+--------------------------------------------
+--------------------------------------------
+
 
 -- Função para fazer update à cinematica de um objeto
 CREATE OR REPLACE FUNCTION update_cinematica(id_cinematica integer)
@@ -95,6 +101,7 @@ BEGIN
 
     -- Determinar velocidade atualizada do alvo
     alvo_velocidade := comparar_velocidade((SELECT novo_velocidade(velocidade, aceleracao, 1) FROM cinematica WHERE id = id_cinematica), alvo_max_velocidade);
+    alvo_velocidade := alvo_velocidade * get_efeito_terreno(id_cinematica);
     -- =============================
     -- ALVO
     -- =============================
@@ -115,10 +122,14 @@ BEGIN
     perseguicao p
     ON c.id = p.id_perseguidor;
 
-
 END
 $$ LANGUAGE plpgsql;
 
+--------------------------------------------
+--------------------------------------------
+-- Update de cinematicas_perseguidores:
+--------------------------------------------
+--------------------------------------------
 
 CREATE OR REPLACE FUNCTION update_cinematica_perseguidor(_id_perseguidor integer, id_cinematica integer)
 RETURNS void
@@ -144,10 +155,10 @@ BEGIN
     UPDATE cinematica AS c
     SET
         aceleracao = obter_aceleracao_perseguidor(_id_perseguidor, id_cinematica, 5),
-        -- Get novo_velocidade or max_velocidade, given tipo of objeto
+        -- Get novo_velocidade or max_velocidade, given type of objeto
         velocidade = (
             SELECT DISTINCT
-            comparar_velocidade(novo_velocidade(c.velocidade, c.aceleracao, 1), v.velocidade_max)
+            comparar_velocidade(novo_velocidade(c.velocidade, c.aceleracao, 1), v.velocidade_max) * get_efeito_terreno(_id_perseguidor)
             FROM V_VMAX_AMAX_OBJETO v
             WHERE v.nome = c.nome
         ),
@@ -160,13 +171,20 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--------------------------------------------
+--------------------------------------------
+-- Obter efeito de terrenos na velocidade:
+--------------------------------------------
+--------------------------------------------
 
--- Query para saber em que terrenos um determinado id está inserido, com o seu efeito (provavelmente colocar numa view é melhor opção)
--- Caso o mesmo ponto esteja em vários terrenos, retornar o terreno com maior hierarquia
-/*
-SELECT t.*, ot.efeito
-FROM terreno t
-INNER JOIN cinematica c ON ST_Within(c.g_posicao, t.geo_terreno)
-INNER JOIN objeto_terreno ot ON ot.nome_terreno = t.nome AND ot.nome_objeto = c.nome
-WHERE c.id = 2;
-*/
+CREATE OR REPLACE FUNCTION get_efeito_terreno(_id_cinematica integer)
+RETURNS real
+AS $$
+DECLARE
+    efeito real;
+BEGIN
+    SELECT v.efeito FROM v_efeito_terreno_objeto v WHERE v.id_cinematica = _id_cinematica INTO efeito;
+    return efeito;
+END 
+$$ LANGUAGE plpgsql;
+

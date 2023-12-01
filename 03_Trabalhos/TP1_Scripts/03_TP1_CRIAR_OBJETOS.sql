@@ -73,6 +73,12 @@ CREATE TABLE perseguicao(
 );
 
 
+CREATE VIEW v_efeito_terreno_objeto AS 
+    SELECT DISTINCT ON(c.id) c.id AS id_cinematica, t.nome, ot.efeito, t.hierarquia
+    FROM terreno t
+    INNER JOIN cinematica c ON ST_Within(c.g_posicao, t.geo_terreno)
+    INNER JOIN objeto_terreno ot ON ot.nome_terreno = t.nome AND ot.nome_objeto = c.nome
+    ORDER BY c.id ASC, hierarquia DESC;
 
 --------------------------------------------------------------
 --------------------------------------------------------------

@@ -102,6 +102,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--______________________
+-- Multiplicar velocidade por escalar
+--______________________
+CREATE OR REPLACE FUNCTION multiplicar_velocidade_por_escalar(v1 t_velocidade, escalar real)
+RETURNS t_velocidade
+AS $$
+DECLARE
+    v_result_linear t_vector;
+    v_result t_velocidade;
+BEGIN
+    v_result_linear := (v1.linear) * escalar;
+    v_result_linear.x := TRUNC(v_result_linear.x::numeric,  2);
+    v_result_linear.y := TRUNC(v_result_linear.y::numeric, 2);
+    v_result := ((v_result_linear), (v1.angular));
+
+    RETURN v_result;
+END
+$$ LANGUAGE plpgsql;
+
 
 ---------------------------------------------------
 -- Definição dos Operadores
@@ -110,6 +129,13 @@ CREATE OPERATOR * (
 leftarg = t_vector,
 rightarg = real,
 procedure = produto_vector_por_escalar_PLGSQL,
+commutator = *
+);
+
+CREATE OPERATOR * (
+leftarg = t_velocidade,
+rightarg = real,
+procedure = multiplicar_velocidade_por_escalar,
 commutator = *
 );
 
