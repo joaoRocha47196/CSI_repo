@@ -13,8 +13,10 @@
 -- Obter valores de 'objeto' para um instante do tempo
 ----------------------------------------------------------
 DROP FUNCTION IF EXISTS novo_posicao( geometry, t_velocidade, real );
+DROP FUNCTION IF EXISTS novo_posicao_com_orientacao;
 DROP FUNCTION IF EXISTS novo_orientacao( real, t_velocidade, real );
 DROP FUNCTION IF EXISTS novo_velocidade( t_velocidade, t_aceleracao, real );
+DROP FUNCTION IF EXISTS novo_posicao_com_orientacao( t_velocidade, t_aceleracao, real );
 
 --____________________________________________________
 -- Obter a nova posicao do objecto no instante 'tempo'
@@ -29,6 +31,33 @@ ST_Translate( $1,
               (($2).linear * $3 ).x,
               (($2).linear * $3 ).y )
 $$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION novo_posicao_com_orientacao(
+    g_posicao geometry,
+    velocidade t_velocidade,
+    orientacao real,
+    tempo real
+)
+RETURNS geometry AS $$
+DECLARE
+    velocidade_linear_x real;
+    velocidade_linear_y real;
+BEGIN
+    -- Calcula as componentes x e y da velocidade linear com base na orientação
+    velocidade_linear_x := (velocidade.linear * TRUNC(cos(orientacao)::numeric, 2) * tempo).x;
+    velocidade_linear_y := (velocidade.linear * TRUNC(sin(orientacao)::numeric, 2) * tempo).y;
+
+    -- Realiza a translação com as componentes calculadas da velocidade linear
+    RETURN ST_Translate(
+        $1,
+        velocidade_linear_x,
+        velocidade_linear_y
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+
+
 
 
 --_______________________________________________________
