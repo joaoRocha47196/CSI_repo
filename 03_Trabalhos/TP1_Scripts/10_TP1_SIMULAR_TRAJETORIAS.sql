@@ -11,7 +11,7 @@
 
 
 DROP FUNCTION simular_trajetorias_rota;
-DROP FUNCTION atualizar_orientação;
+DROP FUNCTION atualizar_orientacao;
 DROP FUNCTION simular_trajetorias_orientacao;
 --------------------------------------------
 --------------------------------------------
@@ -70,7 +70,7 @@ $$ LANGUAGE plpgsql;
 
 
 
--- before calling this functuion change cinematic orietnatntion, cause other function changes oritentation
+-- before calling this function change cinematic orientation, because other function changes orientation
 CREATE OR REPLACE FUNCTION simular_trajetorias_orientacao(id_alvo integer, iteracoes integer)
 RETURNS integer
 AS $$
@@ -99,7 +99,7 @@ BEGIN
         PERFORM update_cinematica_perseguidor(id_alvo);
 
         -- ====================================================================
-        -- CALCULATES NEW POSITIONS OF THE OBJECTS GIVEN NEW CINAMETICA VALUES
+        -- CALCULATES NEW POSITIONS OF THE OBJECTS GIVEN NEW CINEMATICA VALUES
         -- ====================================================================
         UPDATE objeto_movel om
         SET geo = ST_Translate(om.geo, ST_X(c.g_posicao) - ST_X(ST_Centroid(om.geo)), ST_Y(c.g_posicao) - ST_Y(ST_Centroid(om.geo)))

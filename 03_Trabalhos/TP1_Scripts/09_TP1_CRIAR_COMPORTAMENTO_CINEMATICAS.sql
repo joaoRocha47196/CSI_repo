@@ -8,8 +8,6 @@
 \connect :dataBase :userName
 --==========================
 --==========================
-
-
 DROP FUNCTION get_efeito_terreno;
 DROP FUNCTION calcular_velocidade_atualizada;
 DROP FUNCTION verify_pos_in_world;
@@ -19,7 +17,7 @@ DROP FUNCTION update_cinematica_sem_orientacao;
 DROP FUNCTION update_cinematica_com_orientacao;
 
 -- =================================================
--- CALCULATES EFECT OF GIVING CINEMATICA ON TERRAIN
+-- CALCULATES EFFECT OF A TERRAIN ON A CINEMATICA'S VELOCITY
 -- =================================================
 CREATE OR REPLACE FUNCTION get_efeito_terreno(_id_cinematica integer)
 RETURNS real
@@ -33,7 +31,7 @@ END
 $$ LANGUAGE plpgsql;
 
 -- =========================================================================
--- APPLIES THE EFFECT OF THE TERRAIN IN THE CINEMATIC AND CHECKS MAX-VELEOCI
+-- APPLIES THE EFFECT OF THE TERRAIN IN THE CINEMATIC AND CHECKS MAX-VELOCITY
 -- =========================================================================
 CREATE OR REPLACE FUNCTION calcular_velocidade_atualizada(id_cinematica integer)
 RETURNS t_velocidade AS $$
@@ -49,7 +47,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- =========================================================================
--- VERIFYS IF CINEMATICA IS IN THE DIMENSIONS OF WORD
+-- VERIFIES IF CINEMATICA INSIDE THE WORLD GEOMETRY
 -- =========================================================================
 CREATE OR REPLACE FUNCTION verify_pos_in_world(new_pos geometry)
 RETURNS geometry AS $$

@@ -1,0 +1,1 @@
+_go 05_TP1_POVOAR_OBJETOS.sql
