@@ -115,7 +115,6 @@ BEGIN
     -- ==================================
     -- SEGUIDOR
     -- ==================================
-    -- PERFORM update_cinematica_perseguidor(id_cinematica);
     PERFORM update_cinematica_perseguidor(p.id_perseguidor, id_cinematica) 
     FROM cinematica c 
     INNER JOIN 

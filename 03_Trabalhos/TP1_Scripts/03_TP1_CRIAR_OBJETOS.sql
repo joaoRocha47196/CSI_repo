@@ -89,3 +89,4 @@ CREATE VIEW v_efeito_terreno_objeto AS
 INSERT INTO cinematica_hist
 SELECT nextval('cinematica_hist_id_hist_seq'), id, orientacao, velocidade , aceleracao, g_posicao
 FROM cinematica;
+
