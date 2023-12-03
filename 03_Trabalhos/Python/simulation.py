@@ -14,7 +14,7 @@ class Simulation:
         }
 
         # Your PostgreSQL query
-        self.__sql_query = "SELECT simular_trajetorias(2,1);"
+        self.__sql_query = "SELECT simular_trajetorias_rota(2,1);"
 
     def on_button_click(self):
         self.execute_query()

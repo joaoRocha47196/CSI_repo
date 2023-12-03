@@ -1,0 +1,22 @@
+============================================
+DOCUMENTO DE INSTRUÇÕES AUXILIARES PARA
+TESTE DA SOLUÇÃO PROPOSTA PELO GRUPO 8
+============================================
+INSTRUÇÕES ELABORADAS POR:
+	- João Rocha 47196
+	- Rafael Carvalho 47663
+============================================
+
+1. Alterar o ficheiro _go para incluir as credenciais do utilizador
+
+2. Criar e popular a base de dados correndo, sequencialmente, os scripts _go<numero> à exceção do _go11_destroy
+
+3. Alterar a chave "password" no ficheiro "simulation.py" na diretoria Python, presente no __init__ da classe Simulation
+
+4. Abrir o ficheiro "QGIS Mundo"
+
+5. Correr o script "main.py" presente na diretoria Python
+
+6. Simular, carregando em "Iterar" na janela criada pelo script Python, ou na seta da direita do teclado (->)
+
+7. Para terminar, correr o ficheiro _go11_destroy para apagar os dados todos
