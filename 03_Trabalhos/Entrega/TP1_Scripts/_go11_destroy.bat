@@ -1,0 +1,1 @@
+_go XX_DESTROY_BD.sql
