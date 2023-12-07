@@ -1,0 +1,6 @@
+
+Neste tema procura-se ilustrar um cenário com um terreno que representa 
+uma praia fluvial (ilustrada como um terreno 2D), atravessada por pequenos riachos.
+Cada geometria adimensional (dimensão zero) representa os chapéus de sol.
+Os chapéus de sol têm uma e só uma cor, que pode ser comum a vários.
+As praias fluviais são identificadas pelo seu nome.

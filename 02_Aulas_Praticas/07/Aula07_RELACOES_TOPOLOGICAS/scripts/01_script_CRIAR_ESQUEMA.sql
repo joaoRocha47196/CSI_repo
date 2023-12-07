@@ -32,19 +32,22 @@ DROP TABLE IF EXISTS geo_2d;
 --------------------------------
 
 CREATE TABLE geo_0d(
-    id int PRIMARY KEY
+    id PRIMARY KEY,
+    cor VARCHAR(20) NOT NULL
 );
 SELECT AddGeometryColumn('', 'geo_0d', 'geo', 0, 'POINT', 2);
 
 
 CREATE TABLE geo_1d(
-    id int PRIMARY KEY 
+    id int PRIMARY KEY, 
+    nome VARCHAR(30) NOT NULL
 );
 SELECT AddGeometryColumn('', 'geo_1d', 'geo', 0, 'LINESTRING', 2);
 
 
 CREATE TABLE geo_2d(
-    id int PRIMARY KEY 
+    id int PRIMARY KEY, 
+    nome VARCHAR(20) UNIQUE NOT NULL
 );
 SELECT AddGeometryColumn('', 'geo_2d', 'geo', 0, 'POLYGON', 2);
 
