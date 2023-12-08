@@ -28,15 +28,12 @@
 -- Obtenha todas as linhas contidas, ou iguais, a lados de polígonos.
 SELECT g1.id, g1.nome, g2.id, g2.nome
 FROM geo_1d g1, geo_2d g2
-WHERE ST_Relate( g2.geo, g1.geo, '102**1**2');
+WHERE ST_Relate( g2.geo, g1.geo, 'FF2101FF2');
 
 -- Obtenha todos os pontos contidos em algum dos lados de um polígono.
-SELECT g.id, cor, ST_AsText(g.geo) FROM geo_0d g, geo_2d gg
-WHERE ST_Touches(gg.geo, g.geo);
-
 SELECT g0.id, g0.cor, g2.id, g2.nome
 FROM geo_0d g0, geo_2d g2
-WHERE ST_Relate( g2.geo, g0.geo, '*F2*F10F2');
+WHERE ST_Relate( g2.geo, g0.geo, 'FF20F1FF2');
 
 -- Acrescente, à base de dados, pontos sobre as linhas contidas num dos lados de um polígono.
 INSERT INTO geo_0d (id, cor, geo)
@@ -49,16 +46,51 @@ geo_2d;
 
 -- Obtenha os pontos que estão sobre as linhas contidas num dos lados de um polígono.
 -- duvida
-SELECT g0.id, ST_AsText(g0.geo)
-FROM geo_0d g0
-WHERE ST_Touches(g0.geo, 
-    (SELECT g1.id, ST_AsText(g1.geo) FROM geo_1d g1, geo_2d g2
-    WHERE ST_Within(g1.geo, ST_Boundary(g2.geo)))
-);
+SELECT g0.* FROM geo_0d g0, geo_2d g2
+WHERE ST_Relate(g2.geo, g0.geo, 'FF20F1FF2');
 
 
 -- Obtenha todas as linhas que contêm outras linhas.
--- g1.id != g2.id garante que não estamos a comparar a mesma linha
-SELECT g1.*
+SELECT g2.*
 FROM geo_1d g1, geo_1d g2
-WHERE ST_Contains(g1.geo, g2.geo) AND g1.id != g2.id;
+WHERE ST_Relate(g1.geo, g2.geo, '1*1**01**');
+
+
+--  Considere a figura em “fig_rio_doca.bmp” e obtenha as docas representadas pelas linhas 3, 4, 5 e 6.
+SELECT g1.*
+FROM geo_1d g1, geo_2d g2
+WHERE ST_Relate(g2.geo, g1.geo, '102**1**2');
+
+--  Altere a matriz construída na alínea f de modo a contemplar as linhas adicionadas na alínea anterior (g).
+SELECT g1.*
+FROM geo_1d g1, geo_2d g2
+WHERE ST_Relate(g2.geo, g1.geo, '**2**1**2');
+
+-- Obtenha as matrizes topológicas que relacionam todos os objectos 0d e 1d construídos
+SELECT ST_Relate(g0.geo, g1.geo)
+FROM geo_0d g0, geo_1d g1;
+
+-- Qual a matriz topológica “mais geral” que permite recuperar todos os objectos 0d e 1d que construiu? Teste essa matriz
+-- Para obter matriz
+SELECT ST_Relate(g0.geo, g1.geo)
+FROM geo_0d g0, geo_1d g1;
+
+-- Teste da matriz
+SELECT DISTINCT * FROM geo_0d g0, geo_1d g1
+WHERE ST_Relate(g0.geo, g1.geo, 'F**FFF102');
+
+-- Obtenha as matrizes topológicas que relacionam todos os objectos 1d entre si.
+SELECT ST_Relate(g.geo, g1.geo)
+FROM geo_1d g, geo_1d g1
+WHERE g.id != g1.id;
+
+-- Obtenha todas as matrizes topológicas que relacionam os objectos 1d e 2d construídos
+SELECT ST_Relate(g1.geo, g2.geo)
+FROM geo_1d g1, geo_2d g2;
+
+-- Qual a matriz topológica “mais geral” que permite recuperar todos os objectos 1d e 2d que construiu? Teste essa matriz.
+SELECT DISTINCT * FROM geo_1d g1, geo_2d g2
+WHERE ST_Relate(g1.geo, g2.geo, '******212');
+
+--  Obtenha todas as geometrias 0d resultantes de intersecções entre linhas
+-- duvida

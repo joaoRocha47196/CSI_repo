@@ -50,7 +50,8 @@ INSERT INTO geo_1d(id, nome, geo)
         (3, 'Riacho3',ST_GeomFromText('LINESTRING(8 30, 15 30)')),
         (4, 'Riacho4',ST_GeomFromText('LINESTRING(11 33, 15 33)')),
         (5, 'Riacho5',ST_GeomFromText('LINESTRING(10 11, 10 25, 15 25)')),
-        (6, 'Riacho6',ST_GeomFromText('LINESTRING(10 35, 12 35)'))
+        (6, 'Riacho6',ST_GeomFromText('LINESTRING(10 35, 12 35)')),
+        (7, 'Riacho7', ST_GeomFromText('LINESTRING(11 10, 14 15)')) -- Adicionada na alinea g
 ;
 
 
