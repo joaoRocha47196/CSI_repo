@@ -29,9 +29,9 @@ SELECT rid, ST_Summary( rast )
 FROM T_RASTER
 ;
 -- 1; "Raster of 6401x4001 pixels has 1 band and extent of BOX(647375.43574513 4367932.42389284,663377.93574513 4377934.92389284)
-    band 1 of pixtype 8BUI is in-db with no NODATA value"
+    --band 1 of pixtype 8BUI is in-db with no NODATA value"
 -- 2; "Raster of 6401x4001 pixels has 1 band and extent of BOX(647375.430627373 4357932.31898779,663377.930627373 4367934.81898779)
-    band 1 of pixtype 8BUI is in-db with no NODATA value"
+    --band 1 of pixtype 8BUI is in-db with no NODATA value"
 
 
 
@@ -107,7 +107,7 @@ SELECT
    ST_Value( rast, 1, T_aux.geo ) As band1_pixel_geo
 FROM T_RASTER
    CROSS JOIN
-   ( SELECT ST_SetSRID( ST_Point( 652783.58, 4366830.53 ), 4236 ) As geo ) As T_aux
+   ( SELECT ST_SetSRID( ST_Point( 653783.58, 4366830.53 ), 4236 ) As geo ) As T_aux
 ;
 -- 1;
 -- 2; 197

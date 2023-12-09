@@ -2,7 +2,7 @@ version: '3'
 
 services:
   docker_pg_tileserv:
-    image: pramsey/pg_tileserv
+    image: pramsey/pg_tileserv:20231005
     ports:
       - "7800:7800"
     environment:
@@ -37,7 +37,7 @@ services:
     ports:
       - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ptrigo.silva@gmail.com
+      PGADMIN_DEFAULT_EMAIL: 47663@alunos.pt
       PGADMIN_DEFAULT_PASSWORD: postgres
     volumes:
       - volume_pgadmin:/var/lib/pgadmin

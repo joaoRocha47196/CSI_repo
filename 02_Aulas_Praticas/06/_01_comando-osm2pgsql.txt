@@ -29,7 +29,7 @@
 
 -- na "Command Prompt" afetar variavel de ambiente "pgpassword" com a password de acesso ao PostgreSQL
 -- set pgpassword=A-SUA-PASSWORD
-set pgpassword=sql
+set pgpassword=iseliano
 
 -- executar para carregar a cidade de lisboa (lisbon.osm.pbf) na base de dados
 -- notar que a opcao "-C" remove toda a informacao do "raster"

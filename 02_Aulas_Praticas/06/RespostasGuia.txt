@@ -36,4 +36,64 @@ d) Quais dos pontos representados têm informação sobre percurso para biciclet
 
     Os pontos representados com informação sobre percurso para bicicleta estão representados na tabela dos pontos, onde o atributo bycicle não é null
     SELECT bicycle FROM planet_osm_point WHERE bicycle NOTNULL;
+
+Capitulo 9:
+
+a) Obtenha um “sumário” sobre a estrutura dos “raster” já carregados (em alínea anterior).
+
+ rid |                                                            st_summary
+-----+----------------------------------------------------------------------------------------------------------------------------------
+   1 | Raster of 6401x4001 pixels has 1 band and extent of BOX(647375.4306273728 4357932.318987791,663377.9306273728 4367934.818987791)+
+     |     band 1 of pixtype 8BUI is in-db with no NODATA value
+-----+----------------------------------------------------------------------------------------------------------------------------------
+   2 | Raster of 6401x4001 pixels has 1 band and extent of BOX(647375.430627373 4357932.31898779,663377.930627373 4367934.81898779)
+     |  --band 1 of pixtype 8BUI is in-db with no NODATA value
+
+
+b) Qual o número de “bandas” (“canais”) de cada “raster” (“bitmap”)?
+
+ rid | st_numbands
+-----+-------------
+   1 |           1
+
+c) Qual a altura e largura, em número de pixéis, de cada “raster”?
+
+ rid | rastheight | rastwidth
+-----+------------+-----------
+   1 |       4001 |      6401
+
+
+d) Qual a altura e largura, em metros, de cada pixel de cada “raster”?
+
+ rid | pixelheight | pixelwidth
+-----+-------------+------------
+   1 |         2.5 |        2.5
+
+e) Qual a altura e largura total, em metros, representada pelos “raster”?
+
+    h    |    w
+---------+---------
+ 10002.5 | 16002.5
+
+f) Qual o valor do pixel que corresponde ao ponto ST_Point( 652783.58, 4366830.53 )? 
+
+ rid | band1_pixel_geo
+-----+-----------------
+   1 |             197
+
+
+g) Altere a interrogação anterior para obter o valor de algum outro ponto do seu interesse; note que 
+pode sempre recorrer a “Coordinate Capture” (alínea anterior) para obter coordenadas.
+
+ rid | band1_pixel_geo
+-----+-----------------
+   1 |             189
+
+i) Quais as coordenadas do canto superior esquerdo (do “raster”) expressas no sistema de 
+coordenadas?
+
+ rid |     longitude     |     latitude
+-----+-------------------+-------------------
+   1 | 647375.4306273728 | 4367934.818987791
+
     
