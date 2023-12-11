@@ -44,39 +44,44 @@
   'zoom': 2,
   'center': [-9.142685, 38.736946], // Lisbon
   'style': {
-   'version': 8,
+    'version': 8,
 
-   'sources': {
-    'source-pg-tileserv': {
-     'type': 'vector',
-     'tiles': [vector_url],
-     'minzoom': 0, 'maxzoom': 22 } },
+    'sources': {
+      'source-pg-tileserv': {
+      'type': 'vector',
+      'tiles': [vector_url],
+      'minzoom': 0, 'maxzoom': 22 } },
 
-   'layers': [{ 'id': id_layer_outline,
-                'source': 'source-pg-tileserv',
-                'source-layer': vector_source_layer,
-                'type': 'line',
-                'paint':  {'line-width': 1.5, 'line-color': line_color} },
+    'layers': [
+                  { 'id': id_layer_outline,
+                    'source': 'source-pg-tileserv',
+                    'source-layer': vector_source_layer,
+                    'type': 'line',
+                    'paint':  {'line-width': 1.5, 'line-color': line_color} 
+                  },
+
+                  { 'id': id_layer_fill,
+                    'source': 'source-pg-tileserv',
+                    'source-layer': vector_source_layer,
+                    'type': 'fill',
+                    'paint':  {'fill-color': 'blue', 'fill-opacity': 0.1, 'fill-outline-color': line_color } 
+                  }
+              ] 
+    } 
+});
 
 
-              { 'id': id_layer_fill,
-                'source': <your-code-here>,
-                'source-layer': <your-code-here>,
-                'type': 'fill',
-                'paint':  {'fill-color': 'blue', 'fill-opacity': 0.1, 'fill-outline-color': line_color } }
-   ] } });
-
-
- //___
- // utility to convert feature properties into html
- function featureHTML(f) {
-  var h = "";
-  var p = f.properties;
-  for (var k in p) {
-   h += "<b>" + k + ":</b> " + p[k] + "<br/>";
-  }
-  return "<p>" + h + "</p>";
- };
+// utility to convert feature properties into html
+function featureHTML(f) {
+    var h = "";
+    var p = f.properties;
+    var countryName = p['name_pt']
+    
+    for (var k in p) {
+        h += "<b>" + k + ":</b> " + p[k] + "<br/>";
+    }
+    return "<p>" + countryName + "</p>";
+}
 
  // when click event occurs on a feature in layer:
  // - open a popup at the location of the click

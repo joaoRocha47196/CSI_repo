@@ -30,6 +30,15 @@ ________________________________________________________________________________
 (execute) create and launch container (micro-service) - pg_tileserv
 $ docker run -dt --name docker_pg_tileserv -e DATABASE_URL=postgresql://postgres:postgres@docker_postgis/my_gis --network=my_docker_network --publish 7800:7800 pramsey/pg_tileserv:20231005
 
+:: Correr localmente
+docker run -dt --name docker_pg_tileserv -e DATABASE_URL=postgresql://postgres:iseliano@host.docker.internal/my_gis --publish 7800:7800 pramsey/pg_tileserv:20231005
+
+:: Com mount do nosso HTML
+docker run -dt --name docker_pg_tileserv -e DATABASE_URL=postgresql://postgres:iseliano@host.docker.internal/my_gis --publish 7800:7800 -v D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\08\Aula08_TILE_MAP\_MapLibre_GL_JS\a03_map_tile_example_maplibregl_vector_pg_tileserv.html:/app/assets/preview-table.html pramsey/pg_tileserv:20231005
+
+
+
+
 (info) after start-up you can connect to the server and explore the published tables and functions in the database
 :: point a Browser to:
 http://localhost:7800

@@ -13,32 +13,35 @@
 
 <div id='map'></div>
 <script>
-
-var map = new maplibregl.Map({
-        'container': 'map',
-        'zoom': 2,
-        'center': [-9.142685, 38.736946], // Lisbon
-
-        'style': {
-                'version': 8,
-                'sources': { 
-                        'source-from-web': {
-                                'type': 'raster',
-                                'tiles': ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"] 
-                        }
+        var map = new maplibregl.Map({
+            container: 'map',
+            zoom: 2,
+            center: [-9.142685, 38.736946], // Lisbon
+        
+            style: {
+                version: 8,
+                sources: {
+                    'source-from-web': {
+                        type: 'raster',
+                        'tiles': [
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+                        ]
+                    }
                 },
-                'layers': [
-                        { 
-                                'id': 'source-from-web-layer',
-                                'type': 'raster',
-                                'source': 'source-from-web',
-                                'minzoom': 0, 'maxzoom': 22 
-                        }
-                ] 
-        } 
-});
-
+                layers: [
+                    {
+                        id: 'source-from-web-layer',
+                        type: 'raster',
+                        source: 'source-from-web',
+                        minzoom: 0,
+                        maxzoom: 22,
+                    }
+                ]
+            }
+        });
 </script>
+        
+        
 
 </body>
 </html>

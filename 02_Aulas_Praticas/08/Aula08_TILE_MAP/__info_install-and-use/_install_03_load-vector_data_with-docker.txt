@@ -40,10 +40,15 @@ ________________________________________________________________________________
 (execute) from the shape-file generate a SQL file:
 $ docker run -v /full-path-to-folder/ne_50m_admin_0_countries/:/shp_data jjrom/shp2pgsql -D -s 4326 /shp_data/ne_50m_admin_0_countries.shp > ./natural_earth.txt
 
-docker run -v D:/ne_50m_admin_0_countries/:/shp_data jjrom/shp2pgsql -D -s 4326 /shp_data/ne_50m_admin_0_countries.shp > ./natural_earth.txt
+docker run -v D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\08/ne_50m_admin_0_countries/:/shp_data jjrom/shp2pgsql -D -s 4326 /shp_data/ne_50m_admin_0_countries.shp > ./natural_earth.txt
+
 
 (execute) load the "./natural_earth.txt" SQL file into PostGIS:
 $ cat ./natural_earth.txt | docker exec -i docker_postgis psql -U postgres -d my_gis
+
+
+:: Na pasta bin do PostgresSQL carregar a tabela assim (localmente)
+psql -h localhost -d my_gis -U postgres -W -f "D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\08\natural_earth.txt"
 
 
 
