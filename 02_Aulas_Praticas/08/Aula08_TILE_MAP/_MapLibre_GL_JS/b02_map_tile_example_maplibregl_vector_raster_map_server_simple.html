@@ -50,22 +50,26 @@
   'style': {
    'version': 8,
 
-   'sources': {
-    <your-code-here>,
+   sources: {
+                'combined-source': {
+                    type: 'raster',
+                    'tiles': [
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+                    ]
+                }
+    },
 
-    'source-from-web': {
-     'type': 'raster',
-     'tiles': ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"] }
-   },
-
-   'layers': [
-              { 'id': 'source-from-web-layer',
-                'type': 'raster',
-                'source': 'source-from-web',
-                'minzoom': 0, 'maxzoom': 22 },
-
-              <your-code-here>
-   ] } });
+    layers: [
+                {
+                    id: 'source-from-web-layer',
+                    type: 'raster',
+                    source: 'combined-source',
+                    minzoom: 0,
+                    maxzoom: 22,
+                }
+            ] 
+    } });
 
 
  //___

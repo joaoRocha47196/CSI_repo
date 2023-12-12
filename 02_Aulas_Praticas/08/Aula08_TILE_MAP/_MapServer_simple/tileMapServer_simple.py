@@ -28,7 +28,7 @@ PORT = 8080
 # database to connect to
 DATABASE = {
   'user':     'postgres',
-  'password': 'postgres',
+  'password': 'iseliano',
   'host':     'localhost',
   'port':     '5432',
   'database': 'my_gis'
@@ -224,7 +224,10 @@ class TileXYZ:
   def isValid(self):
     if not self.__isDefined(): return False
     if self.format not in ['pbf', 'mvt']: return False
-    <your-code-here>
+    size = 2 ** self.z # Size is 2^z
+    if self.x >= size or self.y >= size: return False # Coordinates can't be bigger than size of tiles
+    if self.x < 0 or self.y < 0: return False
+    return True
 
 
   # string representation of class instances
@@ -260,7 +263,10 @@ class TileEnvelope:
     # from tile coordinates (x and y) calculate geographic envelope (bounding-box)
     # notice that XYZ tile coordinates are in "image space", so:
     # - origin is top-left (not bottom-right)
-    <your-code-here>
+    self.xMin = TileEnvelope.minWorldMercator + widthTileMercator * tile.x
+    self.xMax = TileEnvelope.minWorldMercator + widthTileMercator * (tile.x + 1)
+    self.yMin = TileEnvelope.maxWorldMercator - widthTileMercator * (tile.y + 1)
+    self.yMax = TileEnvelope.maxWorldMercator - widthTileMercator * tile.y
 
 
 # ______________________________________________________________________________
@@ -294,7 +300,7 @@ class SQL:
         WHERE ST_Intersects(t.{geomColumn}, ST_Transform(bounding_box.geom, {srid}))
       ) 
 
-      <your-code-here>
+      SELECT ST_AsMVT(geom_mvt.*, '{layerName}') FROM geom_mvt
     """
     sql = sql.format(**parameterData)
     return sql
@@ -304,13 +310,16 @@ class SQL:
   # SQL to get the boundingBox of geometry in EPSG:3857 (Mercator)
   # densify (a little) the edges so that the envelope:
   # - can be safely converted to other coordinate systems
+  # ST_MakeEnvelope creates a rectangular polygon from min and max values of X and Y.
+  # The inputs must be in the spatial reference system specified by SRID
+  # ST_Segmentize returns a modified geometry with a length no longer than the given max_segment_length
   def SELECTenvelope(tileEnvelope):
     DENSIFY_FACTOR = 1.0/4.0
     parameterData = vars(tileEnvelope)
     parameterData['sizeSegment'] = (tileEnvelope.xMax - tileEnvelope.xMin) * DENSIFY_FACTOR
     sql = \
     """
-      <your-code-here>
+      ST_Segmentize (ST_MakeEnvelope({xMin}, {yMin}, {xMax}, {yMax}, 3857), {sizeSegment})
     """
     sql = sql.format(**parameterData)
     return sql
