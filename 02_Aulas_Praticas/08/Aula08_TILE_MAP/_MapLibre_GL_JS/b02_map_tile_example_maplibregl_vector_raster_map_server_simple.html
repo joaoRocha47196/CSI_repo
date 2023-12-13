@@ -27,8 +27,8 @@
  var properties = "properties=formal_en, name_pt, pop_est"
 
  // complete url of service to be provided by the vector tile server
- var vector_url = vector_server + vector_source_layer + "/" + "{z}/{x}/{y}.pbf" + url_QUERY + geom_column + url_SEP + srid + url_SEP + properties;
- // var vector_url = vector_server + "{z}/{x}/{y}.pbf";
+ //var vector_url = vector_server + vector_source_layer + "/" + "{z}/{x}/{y}.pbf" + url_QUERY + geom_column + url_SEP + srid + url_SEP + properties;
+  var vector_url = vector_server + "{z}/{x}/{y}.pbf";
 
  // IMPORTANT: eliminate all white-spaces from vector_url
  vector_url = vector_url.replace(/\s+/g, '')
@@ -54,9 +54,13 @@
                 'combined-source': {
                     type: 'raster',
                     'tiles': [
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
                     ]
+                },
+                'source-map-server-simple' : {
+                    type: 'vector',
+                    tiles: [vector_url],
+                    minzoom: 0, maxzoom: 22
                 }
     },
 
@@ -67,6 +71,19 @@
                     source: 'combined-source',
                     minzoom: 0,
                     maxzoom: 22,
+                },
+                {
+                    'id': id_layer_outline,
+                    'source': 'source-map-server-simple',
+                    'source-layer': vector_source_layer,
+                    'type': 'line',
+                    'paint':  {'line-width': 1.5, 'line-color': line_color} },
+                { 
+                    'id': id_layer_fill,
+                    'source': 'source-map-server-simple',
+                    'source-layer': vector_source_layer,
+                    'type': 'fill',
+                    'paint':  {'fill-color': 'blue', 'fill-opacity': 0.1, 'fill-outline-color': line_color } 
                 }
             ] 
     } });
@@ -80,7 +97,7 @@
   for (var k in p) {
    h += "<b>" + k + ":</b> " + p[k] + "<br/>";
   }
-  return "<p>" + h + "</p>";
+  return "<p>" + p['name_pt'] + "</p>";
  };
 
  // when click event occurs on a feature in layer:

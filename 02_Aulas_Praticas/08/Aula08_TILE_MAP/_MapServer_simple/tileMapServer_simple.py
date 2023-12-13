@@ -54,7 +54,7 @@ TABLE_DEFAULT = {
   KEY_LAYER_NAME:   'public.ne_50m_admin_0_countries',
   KEY_GEOM_COLUMN:  'geom',
   KEY_SRID:         '4326',
-  KEY_PROPERTIES:   'formal_en,name_pt,pop_est'
+  KEY_PROPERTIES:   'name_pt'
   }  
 
 

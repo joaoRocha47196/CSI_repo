@@ -39,7 +39,7 @@ $ cd _MapServer_simple
 $ source __vEnv_py3-7-2/bin/activate
 
 :: execute the tile-server within the venv
-$ python mapServer_simple.py
+$ python tilemapServer_simple.py
 
 :: when work finishes, deactivate the venv
 $ deactivate
