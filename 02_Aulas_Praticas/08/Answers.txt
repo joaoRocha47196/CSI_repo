@@ -1,0 +1,14 @@
+1
+
+b) https://tile.openstreetmap.org/1/0/0.png
+c) https://tile.openstreetmap.org/2/1/1.png
+d) https://tile.openstreetmap.org/3/3/2.png, https://tile.openstreetmap.org/3/3/3.png
+
+e) Zoom 3: https://tile.openstreetmap.org/3/3/3.png
+   Zoom 4: https://tile.openstreetmap.org/4/7/6.png
+   Zoom 5: https://tile.openstreetmap.org/5/15/12.png
+   Zoom 6: https://tile.openstreetmap.org/6/30/24.png
+
+f) https://tile.openstreetmap.org/9/243/196.png
+
+g) https://tile.openstreetmap.org/13/3888/3137.png
