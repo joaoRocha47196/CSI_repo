@@ -42,12 +42,12 @@ implements I_Config
            
       meuIndexador.indexarArtigo( "O rato e o rei",
                                   "Desconhecido & Popular",
-                                  "destrava línguas",
+                                  "destrava linguas",
                                   "oArtigo_A.txt" );
       
       meuIndexador.indexarArtigo( "A vida",
                                   "Gato & Rato & Rei",
-                                  "crónica",
+                                  "cronica",
                                   "oArtigo_B.txt" );
       
       meuIndexador.indexarArtigo( "Gato branco, gato preto",
@@ -76,7 +76,7 @@ implements I_Config
       } 
       catch( FileNotFoundException e )
       {
-         System.out.println( a_nomeDoFicheiro + ": não existe Meuindexador::indexarArtigo" );
+         System.out.println( a_nomeDoFicheiro + ": nao existe Meuindexador::indexarArtigo" );
       }
       catch( Exception e )
       {
@@ -91,7 +91,7 @@ implements I_Config
    throws IOException
    {
       Document documento = new Document();
-      // Sobre título, autores e temas
+      // Sobre titulo, autores e temas
       documento.add( new TextField( "titulo", a_titulo, Field.Store.YES ) );
       documento.add( new TextField( "autor", a_listaDeAutores, Field.Store.YES ) );
       documento.add( new TextField( "tema", a_listaDeTemas, Field.Store.YES ) );
@@ -107,7 +107,7 @@ implements I_Config
                                 l_ultimaDataDeEscrita,
                                 ft_textoCompleto ) );
       
-      // O conteúdo do documento
+      // O conteudo do documento
       BufferedReader l_leitorDoConteudo =
          new BufferedReader( new InputStreamReader( new FileInputStream( a_ficheiro ), "ISO-8859-1" ) ); // "UTF-8"
       documento.add( new TextField( "conteudo", l_leitorDoConteudo ) );    
@@ -120,9 +120,9 @@ implements I_Config
    private void indexarDocumento( Document documento, File a_ficheiro ) throws Exception
    {
       //PTS-2015 Analyzer analisador = new StandardAnalyzer( _VERSION, CharArraySet.EMPTY_SET );
-      Analyzer analisador = new StandardAnalyzer( CharArraySet.EMPTY_SET );
+      //Analyzer analisador = new StandardAnalyzer( CharArraySet.EMPTY_SET );
       // para tratar caracteres acentuados e eliminar "stop words" usar o "MeuAnalisador"
-      // Analyzer analisador = new MeuAnalisador( "_asMinhasStopWords.txt" );
+      Analyzer analisador = new MeuAnalisador( "_asMinhasStopWords.txt" );
 
       File dir = new File( _kDirectorioComOsIndices );
       boolean dirEmpty = ( dir.isDirectory() && ( dir.list().length == 0 ) );

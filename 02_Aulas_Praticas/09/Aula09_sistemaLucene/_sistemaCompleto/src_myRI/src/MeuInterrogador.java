@@ -54,9 +54,9 @@ implements I_Config
       IndexSearcher pesquisador = new IndexSearcher( leitorDoIndice );
       // Notar que o analisador aqui usado deve ser o mesmo que o usado durante o processo de indexacao
       //PTS-2015 Analyzer analisador = new StandardAnalyzer( _VERSION, CharArraySet.EMPTY_SET );
-      Analyzer analisador = new StandardAnalyzer( CharArraySet.EMPTY_SET );
+      //Analyzer analisador = new StandardAnalyzer( CharArraySet.EMPTY_SET );
       // para tratar caracteres acentuados e eliminar "stop words" usar o "MeuAnalisador"
-      // Analyzer analisador = new MeuAnalisador( "_asMinhasStopWords.txt" );
+       Analyzer analisador = new MeuAnalisador( "_asMinhasStopWords.txt" );
             
       try
       {
@@ -83,7 +83,7 @@ implements I_Config
       System.out.print( "? > ");
       String campo = U_LeitorEscritorLinha.ler();
       
-      // Por omissão considera-se o campo "conteúdo"
+      // Por omissao considera-se o campo "conteudo"
       campo = campo.trim().isEmpty() ? "conteudo" : campo;
       
       System.out.println( "%" + campo + "%" );

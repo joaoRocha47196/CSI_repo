@@ -15,5 +15,5 @@ set demo=%lucenePath%\lucene-demo-7.1.0.jar
 set queryparser=%lucenePath%\lucene-queryparser-7.1.0.jar
 ::set analyzers=%lucenePath%\lucene-analyzers-common-7.1.0.jar
 
-java -classpath %core%;%demo%;%analyzers%;%queryparser% org.apache.lucene.demo.SearchFiles -index %dataPath%\z02_coleccao_indexada
+java -classpath %core%;%demo%;%analyzers%;%queryparser% org.apache.lucene.demo.SearchFiles -index %dataPath%\z02_coleccao_indexada 
 

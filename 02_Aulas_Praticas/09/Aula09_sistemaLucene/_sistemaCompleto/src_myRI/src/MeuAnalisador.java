@@ -51,7 +51,7 @@ extends Analyzer
    }
 
 
-   // M�todo abstracto em "Analyzer"
+   // Método abstracto em "Analyzer"
    @Override
    //PTS-2015 protected TokenStreamComponents createComponents( String nomeDoCampo, Reader leitorIO )
    protected TokenStreamComponents createComponents( String nomeDoCampo )
@@ -60,9 +60,15 @@ extends Analyzer
       Tokenizer fonte = new StandardTokenizer();
       TokenStream resultado = null;
 
-      resultado = new StandardFilter( fonte );
+      //resultado = new StandardFilter( fonte );
+      // Máximo length = 1, ou seja, termos com menos de 2 caracteres são excluidos
+      resultado = new LengthFilter(resultado, 0, 1);
+
+      // Stemming lingua portuguesa
+      resultado = PortugueseStemFilter(resultado);
+
       // para tratar caracteres acentuados usar o ASCIIFoldingFilter
-      // resultado = new ASCIIFoldingFilter( resultado );
+      resultado = new ASCIIFoldingFilter( resultado );
       resultado = new LowerCaseFilter( resultado );
       resultado = new StopFilter( resultado, _conjunto_stopWords );
 

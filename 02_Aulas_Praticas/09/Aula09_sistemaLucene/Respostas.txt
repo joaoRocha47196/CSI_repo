@@ -1,0 +1,107 @@
+2 b)
+
+Enter query:
+int
+Searching for: int
+2 total matching documents
+1. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\SearchFiles.java
+2. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\IndexFiles.java
+
+
+3 a)
+
+Enter query:
+class
+Searching for: class
+2 total matching documents
+1. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\IndexFiles.java
+2. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\SearchFiles.java
+
+Ao alterar o nome do documento e tornar a indexar, o resultado da interrogação vem com o nome atualizado
+
+Enter query:
+class
+Searching for: class
+2 total matching documents
+1. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\IndexFilesAlterado.java
+2. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\SearchFiles.java
+
+
+3 b)
+
+Manteve-se o registo do documento com o nome anterior
+
+Enter query:
+class
+Searching for: class
+3 total matching documents
+1. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\IndexFilesAlterado.java
+2. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\IndexFilesNovamenteAlterado.java
+3. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\SearchFiles.java
+
+4 a,b,c) 
+
+Em IndexFiles.java, abaixo da linha 178:
+
+Field myName = new TextField("name", "Rafael", Field.Store.YES);
+
+Enter query:
+name:rafael
+Searching for: name:rafael
+3 total matching documents
+1. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\IndexFiles.java
+2. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\SearchFiles.java
+3. D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\z_coleccao_demo\z01_coleccao_paraIndexar\z01_coleccao_paraIndexar.iml
+
+
+
+5 d)
+
+? > conteudo:rato
+%conteudo:rato%
+
+[1] "A vida"; "Gato & Rato & Rei"; "cronica"
+D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\src_myRI\oArtigo_B.txt [Thu Nov 30 15:54:00 WET 2017]
+
+[2] "O rato e o rei"; "Desconhecido & Popular"; "destrava linguas"
+D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\src_myRI\oArtigo_A.txt [Mon Dec 18 10:36:00 WET 2023]
+
+Numero de documentos encontrados: 2
+
+
+6 c)
+
+D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\src_myRI\oArtigo_A.txt
+[ <a, 1, |3|>, <da, 1, |9|>, <do, 2, |5,7|>, <ficou, 1, |13|>, <garrafao, 1, |6|>, <o, 2, |0,11|>, <rato, 1, |1|>, <rei, 2, |8,12|>, <roeu, 1, |2|>, <rolha, 1, |4|>, <russia, 1, |10|>, <zangado, 1, |14|> ]
+
+D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\src_myRI\oArtigo_B.txt
+[ <do, 1, |8|>, <e, 1, |2|>, <gato, 1, |1|>, <no, 1, |6|>, <o, 2, |0,3|>, <palacio, 1, |7|>, <rato, 1, |4|>, <rei, 1, |9|>, <vivem, 1, |5|> ]
+
+D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\src_myRI\oArtigo_C.txt
+[ <branco, 1, |1|>, <com, 1, |9|>, <de, 1, |7|>, <e, 1, |4|>, <filme, 1, |6|>, <gato, 2, |0,2|>, <imagens, 1, |10|>, <kusturika, 1, |8|>, <preto, 1, |3|>, <surrealistas, 1, |11|>, <um, 1, |5|> ]
+
+
+6 d)
+
+
+? > titulo:"O rato e o rei"
+%titulo:"O rato e o rei"%
+
+[1] "O rato e o rei"; "Desconhecido & Popular"; "destrava linguas"
+D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto\src_myRI\oArtigo_A.txt [Mon Dec 18 11:08:00 WET 2023]
+
+Numero de documentos encontrados: 1
+
+
+7
+
+d)    No ficheiro MeuAnalisador.java, linha 65:
+
+   // Máximo length = 1, ou seja, termos com menos de 2 caracteres são excluidos
+      resultado = new LengthFilter(resultado, 0, 1);
+
+e) No ficheiro MeuAnalisador.java, linha 67:
+
+      // Stemming lingua portuguesa
+      resultado = PortugueseStemFilter(resultado);
+

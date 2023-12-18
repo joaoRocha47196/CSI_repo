@@ -108,8 +108,8 @@ implements I_Config
             
             if( vector_termoFrequencia == null )
             {
-               System.out.println( "Nao existe informação de frequências em \"conteudo\"" );
-               System.out.println( "(criar índice para campo \"conteudo\" com \"Field.TermVector\")" );
+               System.out.println( "Nao existe informacao de frequencias em \"conteudo\"" );
+               System.out.println( "(criar indice para campo \"conteudo\" com \"Field.TermVector\")" );
                return;
             }
             Document documento = leitorDoIndice.document( iLoop );
@@ -169,8 +169,8 @@ implements I_Config
       String resultado = "";
       if( docsPosicoesIter == null )
       {
-         System.out.println( "Não existem termos com posições em \"conteudo\"" );
-         System.out.println( "(criar índice para campo \"conteudo\" com \"Field.TermVector.WITH_POSITIONS_OFFSETS\")" );
+         System.out.println( "Nao existem termos com posicoes em \"conteudo\"" );
+         System.out.println( "(criar indice para campo \"conteudo\" com \"Field.TermVector.WITH_POSITIONS_OFFSETS\")" );
          return resultado;
       }
 

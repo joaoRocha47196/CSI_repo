@@ -177,6 +177,9 @@ public class IndexFiles {
       Field pathField = new StringField("path", file.toString(), Field.Store.YES);
       doc.add(pathField);
 
+      Field myNameField = new TextField("name", "Rafael", Field.Store.YES);
+      doc.add(myNameField);
+
       // Add the last modified date of the file a field named "modified".
       // Use a LongPoint that is indexed (i.e. efficiently filterable with
       // PointRangeQuery).  This indexes to milli-second resolution, which

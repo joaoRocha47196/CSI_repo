@@ -5,11 +5,11 @@
 
 
 :: Definir Caminho para "javac" e "jar" [PTS: AJUSTAR]
-set javaBinPath="C:\Program Files\Java\jdk1.8.0_111\bin"
+set javaBinPath="C:\Program Files\Java\jdk-18.0.2.1\bin"
 
 
 :: Definir Caminho para "lucene" [PTS: AJUSTAR]
-set lucenePath="C:\Users\ptrigo\Documents\CSI_SIGM_2017_18\Aula08_sistemaLucene\_sistemaCompleto"
+set lucenePath="D:\Eu\ISEL\MEIC\1_Semestre\CSI\CSI_repo\02_Aulas_Praticas\09\Aula09_sistemaLucene\_sistemaCompleto"
 
 set core=%lucenePath%\lucene-core-7.1.0.jar
 set demo=%lucenePath%\lucene-demo-7.1.0.jar
